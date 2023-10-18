@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class TouchObject : MonoBehaviour
 {
-    public GameObject Target;
-    public float Speed;
-    private bool _touched;
+    public string TargetTag = "Target";
+    public float Speed = 1f;
+    private bool _touched = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -17,15 +17,16 @@ public class TouchObject : MonoBehaviour
     {
         if (_touched)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
+        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == Target)
+        if (other.gameObject.tag == TargetTag)
         {
-            Debug.Log($"{Target} touched {this}");
+            Debug.Log($"{other} touched {this}");
             _touched = true;
         }
     }
