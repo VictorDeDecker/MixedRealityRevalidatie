@@ -112,6 +112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnObjects:
-  - {fileID: 3497002830141911066, guid: 572bba357fb77834ca0a9ab66cea3a54, type: 3}
+  - {fileID: 104517609856167801, guid: 94c015d94f6e5364e9b36b960bbe1b77, type: 3}
   AmountOfObjects: 5
   SpawnDurationInSec: 60
