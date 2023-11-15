@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Target
   - RockTarget
+  - Ship
   layers:
   - Default
   - TransparentFX
