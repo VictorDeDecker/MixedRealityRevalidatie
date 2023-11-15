@@ -40,7 +40,7 @@ public class ObjectSpawner : MonoBehaviour
         var spawnLocation = RandomPointOnPlane();
         var spawnObject = SpawnObjects[Mathf.FloorToInt(SpawnObjects.Count * Random.value)];
 
-        var newObject = Instantiate(spawnObject, spawnLocation, Quaternion.identity);
+        var newObject = Instantiate(spawnObject.gameObject, spawnLocation, Quaternion.identity);
     }
 
     private Vector3 RandomPointOnPlane()
