@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public List<GameObject> SpawnObjects;
+    public List<TouchObject> SpawnObjects;
     public uint AmountOfObjects = 10;
     public uint SpawnDurationInSec = 60;
     private bool _spawning = false;
