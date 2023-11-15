@@ -51,28 +51,46 @@ public class UnityServer : MonoBehaviour
             // Get the request
             HttpListenerRequest request = context.Request;
 
-            // Read the request body
-            using (Stream body = request.InputStream)
+            if (request.HttpMethod == "OPTIONS")
             {
-                using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
+                SendOkResponse(context);
+                return;
+            }
+
+            if (request.RawUrl == "/test")
+            {
+                SendOkResponse(context);
+                return;
+            }
+
+            if (request.RawUrl == "/updateParameter")
+            {
+                using (Stream body = request.InputStream)
                 {
-                    string requestBody = reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
+                    {
+                        string requestBody = reader.ReadToEnd();
+                        Debug.Log(requestBody);
 
-                    // Parse the request body (assuming it's in JSON format)
-                    // Adjust your parsing based on your actual protocol
-                    ParameterChangeRequest parameterChangeRequest = JsonUtility.FromJson<ParameterChangeRequest>(requestBody);
+                        ParameterChangeRequest parameterChangeRequest = JsonConvert.DeserializeObject<ParameterChangeRequest>(requestBody);
+                        Debug.Log($"Deserialized: {parameterChangeRequest}");
 
-                    // Update Unity parameters based on the request
-                    UpdateParameters(parameterChangeRequest);
+                        UpdateParameters(parameterChangeRequest);
 
-                    // Send a response (if needed)
-                    HttpListenerResponse response = context.Response;
-                    string responseString = "Parameter change successful!";
-                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-                    response.ContentLength64 = buffer.Length;
-                    Stream output = response.OutputStream;
-                    output.Write(buffer, 0, buffer.Length);
-                    output.Close();
+                        // Send a response (if needed)
+                        HttpListenerResponse response = context.Response;
+                        response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+                        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+                        response.ContentType = "application/json";
+
+                        string jsonResponse = "{\"message\": \"Succesful\"}";
+                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+                        response.ContentLength64 = buffer.Length;
+                        Stream output = response.OutputStream;
+                        output.Write(buffer, 0, buffer.Length);
+                        output.Close();
+                    }
                 }
             }
         }
@@ -84,6 +102,9 @@ public class UnityServer : MonoBehaviour
 
     void UpdateParameters(ParameterChangeRequest request)
     {
+        Debug.Log(request.parameterToChange);
+        Debug.Log(request.parameterValue);
+        Debug.Log(request.scriptToChange);
         switch (request.scriptToChange)
         {
             case "touchObject":
@@ -108,9 +129,22 @@ public class UnityServer : MonoBehaviour
             default:
                 break;
         }
-        // Implement the logic to update Unity parameters based on the request
-        // For example, you can use SendMessage, events, or other mechanisms to notify your game logic
-        // Adjust this based on your specific parameter adjustment needs
+    }
+
+    void SendOkResponse(HttpListenerContext context)
+    {
+        HttpListenerResponse response = context.Response;
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+        response.ContentType = "application/json";
+
+        string jsonResponse = "{\"message\": \"OK\"}";
+        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+        response.ContentLength64 = buffer.Length;
+        Stream output = response.OutputStream;
+        output.Write(buffer, 0, buffer.Length);
+        output.Close();
     }
 }
 

@@ -1,0 +1,68 @@
+<div class="columns">
+  <div class="column is-two-fifths">
+    <div class="box mt-5">
+      <label class="label">Object speed</label>
+      <input
+        type="range"
+        min="1"
+        max="15"
+        value="2"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="speed"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="speed" />
+      </div>
+
+      <button class="button is-primary" (click)="applySpeed()">Apply</button>
+    </div>
+
+    <div class="box mt-5">
+      <label class="label"
+        >Amount of objects patient has to dodge in the given time</label
+      >
+      <input
+        type="range"
+        min="1"
+        max="500"
+        value="30"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="objectsAmount"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="objectsAmount" />
+      </div>
+
+      <button class="button is-primary" (click)="applyAmountOfObjects()">
+        Apply
+      </button>
+    </div>
+
+    <div class="box mt-5">
+      <label class="label">Length of the level in seconds</label>
+      <input
+        type="range"
+        min="1"
+        max="600"
+        value="60"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="timeInSeconds"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="timeInSeconds" />
+      </div>
+
+      <button class="button is-primary" (click)="applyAmountOfSeconds()">
+        Apply
+      </button>
+    </div>
+  </div>
+
+  <div class="column"></div>
+</div>
