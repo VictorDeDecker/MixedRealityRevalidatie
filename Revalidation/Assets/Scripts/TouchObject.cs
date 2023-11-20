@@ -5,21 +5,20 @@ public class TouchObject : MonoBehaviour
     public string TargetTag = "Target";
     public float Speed = 1f;
     private bool _touched = false;
+    public float Rotation = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        transform.Rotate(0,Rotation,0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_touched)
         {
             Destroy(gameObject);
         }
-        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+        transform.Translate(Vector3.left * Speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
