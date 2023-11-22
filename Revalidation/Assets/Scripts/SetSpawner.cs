@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SetSpawner : MonoBehaviour
 {
-    public List<GameObject> Objects;
+    public List<TouchObject> Objects;
 
     public int SetWidth = 5;
 
-    public int AmountOfSets = 90;
+    public int AmountOfSets = 45;
 
     public int LevelLengthInSec = 180;
 
@@ -69,13 +69,13 @@ public class SetSpawner : MonoBehaviour
         {
             spawnLocation = new Vector3(spawnLocation.x + 1, spawnLocation.y, spawnLocation.z);
             if (spawnSet[i] != null)
-                Instantiate(spawnSet[i], spawnLocation, Quaternion.identity);
+                Instantiate(spawnSet[i].gameObject, spawnLocation, Quaternion.identity);
         }
     }
 
-    private GameObject[] GenerateSet()
+    private TouchObject[] GenerateSet()
     {
-        var returnObject = new GameObject[SetWidth];
+        var returnObject = new TouchObject[SetWidth];
 
         var exclude = new List<int>();
 
