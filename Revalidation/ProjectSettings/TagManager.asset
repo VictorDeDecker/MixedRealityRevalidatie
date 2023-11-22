@@ -8,6 +8,8 @@ TagManager:
   - RockTarget
   - Ship
   - Fish
+  - Balloon
+  - Seagull
   layers:
   - Default
   - TransparentFX
