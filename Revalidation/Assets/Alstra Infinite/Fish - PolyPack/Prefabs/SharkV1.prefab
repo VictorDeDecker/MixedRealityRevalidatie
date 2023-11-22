@@ -1061,6 +1061,8 @@ GameObject:
   - component: {fileID: 6423667263358278535}
   - component: {fileID: 6423667263358278534}
   - component: {fileID: 5605796476392553375}
+  - component: {fileID: 8674831249843750869}
+  - component: {fileID: 1350040457078834070}
   m_Layer: 0
   m_Name: SharkV1
   m_TagString: Untagged
@@ -1137,3 +1139,33 @@ MonoBehaviour:
   TargetTag: Target
   Speed: 2
   Rotation: 90
+--- !u!54 &8674831249843750869
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5939865257273377087}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &1350040457078834070
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5939865257273377087}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.47655603
+  m_Height: 4.9471436
+  m_Direction: 0
+  m_Center: {x: -0.2115488, y: 0.12591198, z: 0}
