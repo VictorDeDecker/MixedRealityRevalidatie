@@ -9,38 +9,60 @@ using UnityEngine;
 public class UnityServer : MonoBehaviour
 {
     private const string prefix = "http://localhost:8085/"; // Update with your desired URL
-    public ObjectSpawner objectSpawner;
+    public SetSpawner objectSpawner;
     private List<TouchObject> touchObject;
+    private HttpListener listener;
+    private bool isRunning;
 
     void Start()
     {
         // Start the server on a separate thread
-        touchObject = objectSpawner.SpawnObjects;
+        touchObject = objectSpawner.Objects;
         System.Threading.ThreadPool.QueueUserWorkItem(o => StartServer());
+    }
+
+    void OnApplicationQuit()
+    {
+        // Stop the server when the application is quitting
+        isRunning = false;
+        StopServer();
     }
 
     void StartServer()
     {
         try
         {
-            HttpListener listener = new HttpListener();
+            listener = new HttpListener();
             listener.Prefixes.Add(prefix);
             listener.Start();
 
             Debug.Log("Server is listening for requests...");
-
-            while (true)
+            isRunning = true;
+            while (isRunning)
             {
-                // Wait for a request
-                HttpListenerContext context = listener.GetContext();
+                if (isRunning)
+                {
+                    // Wait for a request
+                    HttpListenerContext context = listener.GetContext();
 
-                // Process the request
-                ProcessRequest(context);
+                    // Process the request
+                    ProcessRequest(context);
+                }
             }
         }
         catch (Exception e)
         {
             Debug.LogError($"Error starting the server: {e.Message}");
+        }
+    }
+
+    void StopServer()
+    {
+        if (listener != null && listener.IsListening)
+        {
+            listener.Stop();
+            listener.Close();
+            Debug.Log("Server stopped");
         }
     }
 
@@ -119,11 +141,11 @@ public class UnityServer : MonoBehaviour
             case "objectSpawner":
                 if (request.parameterToChange == "amountOfObjects")
                 {
-                    objectSpawner.AmountOfObjects = (uint)request.parameterValue;
+                    objectSpawner.AmountOfSets = (int)request.parameterValue;
                 }
                 else if (request.parameterToChange == "timeInSeconds")
                 {
-                    objectSpawner.SpawnDurationInSec = (uint)request.parameterValue;
+                    objectSpawner.LevelLengthInSec = (int)request.parameterValue;
                 }
                 break;
             default:
