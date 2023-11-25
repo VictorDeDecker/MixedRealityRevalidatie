@@ -24,4 +24,8 @@ export class UnityService {
   async sendLevelToUnity(SceneChange:SceneChange){
     return this.http.post<UnityResponse>(url + "/changeScene", SceneChange);
   }
+
+  async getTextureData(){
+    
+  }
 }
