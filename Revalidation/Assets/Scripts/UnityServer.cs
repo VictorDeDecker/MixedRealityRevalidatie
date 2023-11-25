@@ -8,22 +8,41 @@ using UnityEngine;
 
 public class UnityServer : MonoBehaviour
 {
-    private const string prefix = "http://localhost:8085/"; // Update with your desired URL
+    private const string prefix = "http://localhost:8085/";
+    private static UnityServer instance;
     public SetSpawner objectSpawner;
     private List<TouchObject> touchObject;
     private HttpListener listener;
     private bool isRunning;
+    private readonly LevelManager levelManager = new();
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
-        // Start the server on a separate thread
+        objectSpawner = FindObjectOfType<SetSpawner>();
+
+        if (objectSpawner == null)
+        {
+            objectSpawner = new SetSpawner();
+        }
         touchObject = objectSpawner.Objects;
         System.Threading.ThreadPool.QueueUserWorkItem(o => StartServer());
     }
 
     void OnApplicationQuit()
     {
-        // Stop the server when the application is quitting
         isRunning = false;
         StopServer();
     }
@@ -42,10 +61,7 @@ public class UnityServer : MonoBehaviour
             {
                 if (isRunning)
                 {
-                    // Wait for a request
                     HttpListenerContext context = listener.GetContext();
-
-                    // Process the request
                     ProcessRequest(context);
                 }
             }
@@ -70,7 +86,6 @@ public class UnityServer : MonoBehaviour
     {
         try
         {
-            // Get the request
             HttpListenerRequest request = context.Request;
 
             if (request.HttpMethod == "OPTIONS")
@@ -92,14 +107,12 @@ public class UnityServer : MonoBehaviour
                     using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
                     {
                         string requestBody = reader.ReadToEnd();
-                        Debug.Log(requestBody);
 
                         ParameterChangeRequest parameterChangeRequest = JsonConvert.DeserializeObject<ParameterChangeRequest>(requestBody);
                         Debug.Log($"Deserialized: {parameterChangeRequest}");
 
                         UpdateParameters(parameterChangeRequest);
 
-                        // Send a response (if needed)
                         HttpListenerResponse response = context.Response;
                         response.Headers.Add("Access-Control-Allow-Origin", "*");
                         response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -107,6 +120,35 @@ public class UnityServer : MonoBehaviour
                         response.ContentType = "application/json";
 
                         string jsonResponse = "{\"message\": \"Succesful\"}";
+                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+                        response.ContentLength64 = buffer.Length;
+                        Stream output = response.OutputStream;
+                        output.Write(buffer, 0, buffer.Length);
+                        output.Close();
+                    }
+                }
+            }
+
+            if (request.RawUrl == "/changeScene")
+            {
+                using (Stream body = request.InputStream)
+                {
+                    using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
+                    {
+                        string requestBody = reader.ReadToEnd();
+
+                        SceneChange sceneChange = JsonConvert.DeserializeObject<SceneChange>(requestBody);
+                        Debug.Log($"Deserialized: {sceneChange}");
+
+                        ChangeScene(sceneChange);
+
+                        HttpListenerResponse response = context.Response;
+                        response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+                        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+                        response.ContentType = "application/json";
+
+                        string jsonResponse = "{\"message\": \"Scene was changed\"}";
                         byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
                         response.ContentLength64 = buffer.Length;
                         Stream output = response.OutputStream;
@@ -124,9 +166,6 @@ public class UnityServer : MonoBehaviour
 
     void UpdateParameters(ParameterChangeRequest request)
     {
-        Debug.Log(request.parameterToChange);
-        Debug.Log(request.parameterValue);
-        Debug.Log(request.scriptToChange);
         switch (request.scriptToChange)
         {
             case "touchObject":
@@ -139,14 +178,57 @@ public class UnityServer : MonoBehaviour
                 }
                 break;
             case "objectSpawner":
-                if (request.parameterToChange == "amountOfObjects")
+                if (request.parameterToChange.ToLower() == "AmountOfSets".ToLower())
                 {
                     objectSpawner.AmountOfSets = (int)request.parameterValue;
                 }
-                else if (request.parameterToChange == "timeInSeconds")
+                else if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
                 {
                     objectSpawner.LevelLengthInSec = (int)request.parameterValue;
                 }
+                else if (request.parameterToChange.ToLower() == "InfiniteSpawn".ToLower())
+                {
+                    if ((int)request.parameterValue == 0)
+                        objectSpawner.InfiniteSpawn = false;
+                    else if ((int)request.parameterValue == 1)
+                        objectSpawner.InfiniteSpawn = true;
+                }
+                else if (request.parameterToChange.ToLower() == "MaxPercentageOfMissingObjects".ToLower())
+                {
+                    objectSpawner.MaxPercentageOfMissingObjects = request.parameterValue;
+                }
+                else if (request.parameterToChange.ToLower() == "SetWidth".ToLower())
+                {
+                    objectSpawner.SetWidth = (int)request.parameterValue;
+                }
+                else if (request.parameterToChange.ToLower() == "InfiniteSpawnWaitTime".ToLower())
+                {
+                    objectSpawner.InfiniteSpawnWaitTime = (int)request.parameterValue;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void ChangeScene(SceneChange sceneChange)
+    {
+        switch (sceneChange.destinationScene.ToLower())
+        {
+            case "level1":
+                levelManager.LoadLevel("Level 1");
+                break;
+            case "level2":
+                levelManager.LoadLevel("Level 2");
+                break;
+            case "level3":
+                levelManager.LoadLevel("Level 3");
+                break;
+            case "mainmenu":
+                levelManager.LoadLevel("MainMenu");
+                break;
+            case "quit":
+                levelManager.QuitLevel();
                 break;
             default:
                 break;
@@ -170,7 +252,6 @@ public class UnityServer : MonoBehaviour
     }
 }
 
-// Define a class to represent the expected request format (adjust based on your needs)
 [Serializable]
 public class ParameterChangeRequest
 {
@@ -180,4 +261,11 @@ public class ParameterChangeRequest
     public string parameterToChange;
     [JsonProperty(PropertyName = "value")]
     public float parameterValue;
+}
+
+[Serializable]
+public class SceneChange
+{
+    [JsonProperty(PropertyName = "scene")]
+    public string destinationScene;
 }
