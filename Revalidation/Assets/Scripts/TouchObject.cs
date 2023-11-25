@@ -22,7 +22,7 @@ public class TouchObject : MonoBehaviour
 
         if (transform.tag == "Balloon")
         {
-            transform.Translate(new Vector3(1.5f, 2.5f, 0));
+            transform.Translate(new Vector3(2.5f, 0.5f, 0));
             transform.Rotate(new Vector3(-90f, 0, 0));
         }
 
