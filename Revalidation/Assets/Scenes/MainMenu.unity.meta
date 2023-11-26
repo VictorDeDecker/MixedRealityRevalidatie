@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Revalidation/Assets/Scenes/MainMenu.unity.meta
 guid: c30a0c75f432dbf46819179b2249275b
+========
+guid: b820befc3d986d84295692470e6ce7c8
+>>>>>>>> main:Revalidation/Assets/Stylized_Pirate_Ship/StylShip_Scene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

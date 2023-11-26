@@ -27,4 +27,10 @@ Now you will have the underwater look, but you can also add some fog to improve 
 
 ### Fish generator
 
+The fish generator/spawner works as follows. It is put on a gameobject and it will spawn a set/row of fish for the user to dodge. It puts the set in the middle of the object and spawns them all next to each other. With a chance of skipping over one so there's empty spots the player can dodge into. This works by generating a list of integers to exclude from the set list. Once the exclude list is made the set gets looped over and the objects get added, apart from when the index is in the exclude list.
+
+The level length is decided by a variable and the amount of sets is also set by a variable. With a bit of math you can calculate the time between the spawning of different sets. If infinite spawn is enabled the time between sets can also be changed with a variable.
+
+The objects that get spawned all have a script attached to them that makes them move and detects if they have collided with the Target tag yet. Once they collide with an object that has the Target tag the object destroys itself.
+
 ### Submarine movement
