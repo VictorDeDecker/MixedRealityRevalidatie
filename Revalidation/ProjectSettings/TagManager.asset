@@ -9,6 +9,8 @@ TagManager:
   - Ship
   - Fish
   - SpawnPlane
+  - Balloon
+  - Seagull
   layers:
   - Default
   - TransparentFX
