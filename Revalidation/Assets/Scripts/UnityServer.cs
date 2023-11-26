@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnityServer : MonoBehaviour
 {
@@ -34,13 +35,6 @@ public class UnityServer : MonoBehaviour
             Destroy(gameObject);
         }
 
-        objectSpawner = FindObjectOfType<SetSpawner>();
-
-        if (objectSpawner == null)
-        {
-            objectSpawner = new SetSpawner();
-        }
-
         if (renderController == null)
         {
             renderController = FindObjectOfType<RenderTextureController>();
@@ -56,13 +50,6 @@ public class UnityServer : MonoBehaviour
 
     void Start()
     {
-        objectSpawner = FindObjectOfType<SetSpawner>();
-
-        if (objectSpawner == null)
-        {
-            objectSpawner = new SetSpawner();
-        }
-
         if (renderController == null)
         {
             renderController = FindObjectOfType<RenderTextureController>();
@@ -70,7 +57,6 @@ public class UnityServer : MonoBehaviour
 
         frameInterval = 1f / frameRate;
         //StartCoroutine(SendTexturePeriodically());
-        touchObject = objectSpawner.Objects;
         System.Threading.ThreadPool.QueueUserWorkItem(o => StartServer());
     }
 
@@ -199,73 +185,120 @@ public class UnityServer : MonoBehaviour
 
     void UpdateParameters(ParameterChangeRequest request)
     {
-        switch (request.scriptToChange)
+        try
         {
-            case "touchObject":
-                if (request.parameterToChange == "speed")
-                {
-                    foreach (TouchObject spawnObject in touchObject)
+            switch (request.scriptToChange)
+            {
+                case "touchObject":
+                    if (request.parameterToChange == "speed")
                     {
-                        spawnObject.Speed = request.parameterValue;
+                        foreach (TouchObject spawnObject in touchObject)
+                        {
+                            spawnObject.Speed = request.parameterValue;
+                        }
                     }
-                }
-                break;
-            case "objectSpawner":
-                if (request.parameterToChange.ToLower() == "AmountOfSets".ToLower())
-                {
-                    objectSpawner.AmountOfSets = (int)request.parameterValue;
-                }
-                else if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
-                {
-                    objectSpawner.LevelLengthInSec = (int)request.parameterValue;
-                }
-                else if (request.parameterToChange.ToLower() == "InfiniteSpawn".ToLower())
-                {
-                    if ((int)request.parameterValue == 0)
-                        objectSpawner.InfiniteSpawn = false;
-                    else if ((int)request.parameterValue == 1)
-                        objectSpawner.InfiniteSpawn = true;
-                }
-                else if (request.parameterToChange.ToLower() == "MaxPercentageOfMissingObjects".ToLower())
-                {
-                    objectSpawner.MaxPercentageOfMissingObjects = request.parameterValue;
-                }
-                else if (request.parameterToChange.ToLower() == "SetWidth".ToLower())
-                {
-                    objectSpawner.SetWidth = (int)request.parameterValue;
-                }
-                else if (request.parameterToChange.ToLower() == "InfiniteSpawnWaitTime".ToLower())
-                {
-                    objectSpawner.InfiniteSpawnWaitTime = (int)request.parameterValue;
-                }
-                break;
-            default:
-                break;
+                    break;
+                case "objectSpawner":
+                    if (request.parameterToChange.ToLower() == "AmountOfSets".ToLower())
+                    {
+                        objectSpawner.AmountOfSets = (int)request.parameterValue;
+                    }
+                    else if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
+                    {
+                        objectSpawner.LevelLengthInSec = (int)request.parameterValue;
+                    }
+                    else if (request.parameterToChange.ToLower() == "InfiniteSpawn".ToLower())
+                    {
+                        if ((int)request.parameterValue == 0)
+                            objectSpawner.InfiniteSpawn = false;
+                        else if ((int)request.parameterValue == 1)
+                            objectSpawner.InfiniteSpawn = true;
+                    }
+                    else if (request.parameterToChange.ToLower() == "MaxPercentageOfMissingObjects".ToLower())
+                    {
+                        objectSpawner.MaxPercentageOfMissingObjects = request.parameterValue;
+                    }
+                    else if (request.parameterToChange.ToLower() == "SetWidth".ToLower())
+                    {
+                        objectSpawner.SetWidth = (int)request.parameterValue;
+                    }
+                    else if (request.parameterToChange.ToLower() == "InfiniteSpawnWaitTime".ToLower())
+                    {
+                        objectSpawner.InfiniteSpawnWaitTime = (int)request.parameterValue;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+
     }
 
     void ChangeScene(SceneChange sceneChange)
     {
-        switch (sceneChange.destinationScene.ToLower())
+        AsyncOperation status;
+        try
         {
-            case "level1":
-                MainThreadDispatcher.Instance().Enqueue(() => levelManager.LoadLevel("Level 1"));
-                break;
-            case "level2":
-                MainThreadDispatcher.Instance().Enqueue(() => levelManager.LoadLevel("Level 2"));
-                break;
-            case "level3":
-                MainThreadDispatcher.Instance().Enqueue(() => levelManager.LoadLevel("Level 3"));
-                break;
-            case "mainmenu":
-                MainThreadDispatcher.Instance().Enqueue(() => levelManager.LoadLevel("MainMenu"));
-                break;
-            case "quit":
-                MainThreadDispatcher.Instance().Enqueue(() => levelManager.QuitLevel());
-                break;
-            default:
-                break;
+            switch (sceneChange.destinationScene.ToLower())
+            {
+                case "level1":
+                    MainThreadDispatcher.Instance().Enqueue(() =>
+                    {
+                        status = SceneManager.LoadSceneAsync("Level 1");
+                        status.completed += (x) =>
+                        {
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            touchObject = objectSpawner.Objects;
+                        };
+                    }
+                    );
+
+                    break;
+                case "level2":
+                    MainThreadDispatcher.Instance().Enqueue(() =>
+                    {
+                        status = SceneManager.LoadSceneAsync("Level 2");
+                        status.completed += (x) =>
+                        {
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            touchObject = objectSpawner.Objects;
+                        };
+                    });
+                    break;
+                case "level3":
+                    MainThreadDispatcher.Instance().Enqueue(() =>
+                    {
+                        status = SceneManager.LoadSceneAsync("Level 3");
+                        status.completed += (x) =>
+                        {
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            touchObject = objectSpawner.Objects;
+                        };
+                    });
+                    break;
+                case "mainmenu":
+                    MainThreadDispatcher.Instance().Enqueue(() => SceneManager.LoadSceneAsync("MainMenu"));
+                    break;
+                case "quit":
+                    MainThreadDispatcher.Instance().Enqueue(() => levelManager.QuitLevel());
+                    break;
+                default:
+                    break;
+            }
         }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+    }
+
+    private void Status_completed(AsyncOperation obj)
+    {
+        throw new NotImplementedException();
     }
 
     void SendOkResponse(HttpListenerContext context)
