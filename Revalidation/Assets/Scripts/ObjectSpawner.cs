@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public List<GameObject> SpawnObjects;
+    public List<TouchObject> SpawnObjects;
     public uint AmountOfObjects = 10;
     public uint SpawnDurationInSec = 60;
     private bool _spawning = false;
@@ -40,7 +40,7 @@ public class ObjectSpawner : MonoBehaviour
         var spawnLocation = RandomPointOnPlane();
         var spawnObject = SpawnObjects[Mathf.FloorToInt(SpawnObjects.Count * Random.value)];
 
-        var newObject = Instantiate(spawnObject, spawnLocation, Quaternion.identity);
+        var newObject = Instantiate(spawnObject.gameObject, spawnLocation, Quaternion.identity);
     }
 
     private Vector3 RandomPointOnPlane()
