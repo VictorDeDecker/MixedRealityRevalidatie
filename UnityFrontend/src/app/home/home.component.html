@@ -1,7 +1,7 @@
 <div class="columns">
   <div class="column is-two-fifths">
     <div class="box mt-5">
-      <label class="label">Object speed</label>
+      <label class="label">Speed of the objects</label>
       <input
         type="range"
         min="1"
@@ -21,7 +21,7 @@
 
     <div class="box mt-5">
       <label class="label"
-        >Amount of objects patient has to dodge in the given time</label
+        >Amount of rows a patient has to dodge in the given time</label
       >
       <input
         type="range"
@@ -46,7 +46,7 @@
       <label class="label">Length of the level in seconds</label>
       <input
         type="range"
-        min="1"
+        min="10"
         max="600"
         value="60"
         class="slider"
@@ -62,7 +62,104 @@
         Apply
       </button>
     </div>
+
+    <div class="box mt-5">
+      <label class="label">Amount of missing objects (in percentage)</label>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        step="1"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="MaxAmountOfMissingObjects"
+      />
+
+      <div class="control pl-3">
+        <input
+          class="input"
+          type="number"
+          step="0.05"
+          [(ngModel)]="MaxAmountOfMissingObjects"
+        />
+      </div>
+
+      <button
+        class="button is-primary"
+        (click)="applyPercentageOfMissingObjects()"
+      >
+        Apply
+      </button>
+    </div>
+
+    <div class="box mt-5">
+      <label class="label">Amount of objects per row (=width of the row)</label>
+      <input
+        type="range"
+        min="1"
+        max="15"
+        value="5"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="Width"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="Width" />
+      </div>
+
+      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
+    </div>
+
+    <div class="box mt-5">
+      <label class="label">Infinite spawn</label>
+      <input class="is-circular" type="checkbox" [(ngModel)]="InfiniteSpawn" />
+      <br />
+      <div *ngIf="InfiniteSpawn">
+        <label class="label">Time between rows in seconds</label>
+        <input
+          type="range"
+          min="1"
+          max="10"
+          value="2"
+          class="slider"
+          id="myRange"
+          [(ngModel)]="InfiniteSpawnWaitTime"
+        />
+
+        <div class="control pl-3">
+          <input
+            class="input"
+            type="number"
+            [(ngModel)]="InfiniteSpawnWaitTime"
+          />
+        </div>
+
+        <button class="button is-primary" (click)="applySetWidth()">
+          Apply
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="column"></div>
+  <div class="column">
+    <div class="box mt-5">
+      <button class="button is-primary mr-4" (click)="changeLevel('level1')">
+        Level 1
+      </button>
+      <button class="button is-primary mr-4" (click)="changeLevel('level2')">
+        Level 2
+      </button>
+      <button class="button is-primary mr-4" (click)="changeLevel('level3')">
+        Level 3
+      </button>
+      <button class="button is-primary mr-4" (click)="changeLevel('mainmenu')">
+        Mainmenu
+      </button>
+      <button class="button is-primary" (click)="changeLevel('quit')">
+        Quit
+      </button>
+    </div>
+  </div>
 </div>

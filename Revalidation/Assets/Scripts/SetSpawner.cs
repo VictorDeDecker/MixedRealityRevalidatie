@@ -16,6 +16,8 @@ public class SetSpawner : MonoBehaviour
 
     public float MaxPercentageOfMissingObjects = 0.33f;
 
+    public int InfiniteSpawnWaitTime = 2;
+
     private bool _spawning = false;
 
     // Start is called before the first frame update
@@ -38,7 +40,7 @@ public class SetSpawner : MonoBehaviour
             while (_spawning)
             {
                 SpawnSet();
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(InfiniteSpawnWaitTime);
             }
         }
         else

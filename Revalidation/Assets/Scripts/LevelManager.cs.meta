@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Revalidation/Assets/Scripts/LevelManager.cs.meta
+guid: d76a4c9aeb47c8f42af4cf6c49a67451
+========
+guid: 315997447d8347a46accfe7c8c0b1f21
+>>>>>>>> main:Revalidation/Assets/Scripts/RotateRock.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
