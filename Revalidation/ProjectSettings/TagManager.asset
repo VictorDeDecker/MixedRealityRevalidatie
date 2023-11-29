@@ -11,6 +11,7 @@ TagManager:
   - SpawnPlane
   - Balloon
   - Seagull
+  - Submarine
   layers:
   - Default
   - TransparentFX
