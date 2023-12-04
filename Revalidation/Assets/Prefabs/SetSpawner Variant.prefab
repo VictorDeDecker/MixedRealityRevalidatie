@@ -76,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 6751750825938235354, guid: 6465c5119d34b12409b398b24937fb3c,
         type: 3}
       propertyPath: m_Name
-      value: SetSpawner
+      value: SetSpawner Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6751750825938235354, guid: 6465c5119d34b12409b398b24937fb3c,
         type: 3}
@@ -105,9 +105,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Objects:
-  - {fileID: 4729839888221654087, guid: 572bba357fb77834ca0a9ab66cea3a54, type: 3}
+  - {fileID: 7976751554579448255, guid: 94c015d94f6e5364e9b36b960bbe1b77, type: 3}
+  - {fileID: 9191125292701657805, guid: 67de17aaa6711224f80123d9b1ef8cb7, type: 3}
+  - {fileID: 5045825391060132242, guid: 641ba2dfcc8b38a4e93e58aa8dcd190b, type: 3}
+  - {fileID: 2282007602396677355, guid: a05072560c3476b4cb8dddf22f697392, type: 3}
+  - {fileID: 5605796476392553375, guid: 2fb93ff3c1250a74ca5f53a6bc162675, type: 3}
+  - {fileID: 8178819755832840143, guid: 934c3cb618bc77f4aab837dc1157f325, type: 3}
+  - {fileID: 3247801335893095559, guid: 0036bafb61fb50a44aea6f3044501c41, type: 3}
+  - {fileID: 4294771671160400126, guid: 4982bf5e49398a14db90675ef765723c, type: 3}
+  - {fileID: 4278833694462851529, guid: f9686e614f3e7b446bc732d848d3178d, type: 3}
   SetWidth: 5
   AmountOfSets: 45
   LevelLengthInSec: 180
   InfiniteSpawn: 0
   MaxPercentageOfMissingObjects: 0.33
+  InfiniteSpawnWaitTime: 2

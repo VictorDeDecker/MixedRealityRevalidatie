@@ -15,18 +15,18 @@ public class TouchObject : MonoBehaviour
     {
         transform.Rotate(0, Rotation, 0);
 
-        if (transform.tag == "Ship")
+        if (transform.CompareTag("Ship"))
         {
             transform.Rotate(new Vector3(90f, 0, 0));
         }
 
-        if (transform.tag == "Balloon")
+        if (transform.CompareTag("Balloon"))
         {
             transform.Translate(new Vector3(2.5f, 0.5f, 0));
             transform.Rotate(new Vector3(-90f, 0, 0));
         }
 
-        if (transform.tag == "Seagull")
+        if (transform.CompareTag("Seagull"))
         {
             transform.Translate(new Vector3(3.157137f, 0, 7.726573f));
             transform.Rotate(new Vector3(0, 180f, 0));
@@ -40,31 +40,35 @@ public class TouchObject : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (transform.tag == "RockTarget")
+        if (transform.CompareTag("RockTarget"))
         {
-            transform.Translate(RockDirection * Speed * Time.deltaTime, Space.World);
+            transform.Translate(Speed * Time.deltaTime * RockDirection, Space.World);
         }
-        else if (transform.tag == "Ship")
+        else if (transform.CompareTag("Ship"))
         {
-            transform.Translate(ShipDirection * Speed * Time.deltaTime, Space.World);
+            transform.Translate(Speed * Time.deltaTime * ShipDirection, Space.World);
         }
-        else if (transform.tag == "Balloon")
+        else if (transform.CompareTag("Balloon"))
         {
-            transform.Translate(BalloonDirection * Speed * Time.deltaTime, Space.World);
+            transform.Translate(Speed * Time.deltaTime * BalloonDirection, Space.World);
         }
-        else if (transform.tag == "Seagull")
+        else if (transform.CompareTag("Seagull"))
         {
-            transform.Translate(SeagullDirection * Speed * Time.deltaTime, Space.World);
+            transform.Translate(Speed * Time.deltaTime * SeagullDirection, Space.World);
+        }
+        else if (transform.CompareTag("Submarine"))
+        {
+            transform.Translate(Speed * Time.deltaTime * Vector3.forward, Space.World);
         }
         else
         {
-            transform.Translate(Vector3.left * Speed * Time.deltaTime);
+            transform.Translate(Speed * Time.deltaTime * Vector3.left);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == TargetTag)
+        if (other.gameObject.CompareTag(TargetTag))
         {
             Debug.Log($"{other} touched {this}");
             _touched = true;
