@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 4767797584182971324}
   - component: {fileID: 3306894991799637244}
   - component: {fileID: 1121317040894211708}
+  - component: {fileID: -4629150988372794233}
   m_Layer: 0
   m_Name: FishV1Light
   m_TagString: Untagged
@@ -212,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetTag: Target
   Speed: 2
-  Rotation: 90
+  Rotation: -90
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: 1}
@@ -283,6 +284,25 @@ CapsuleCollider:
   m_Height: 0.74550325
   m_Direction: 0
   m_Center: {x: -0.0061876774, y: -0.010836333, z: 0.00031230846}
+--- !u!114 &-4629150988372794233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4767797584182971325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9286f2bc44280429d7d1f266edc68b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTag: Target
+  Speed: 1
+  Rotation: 0
+  RockDirection: {x: 0, y: 0, z: 1}
+  ShipDirection: {x: 0, y: 0, z: 1}
+  BalloonDirection: {x: 0, y: 0, z: -1}
+  SeagullDirection: {x: 0, y: 0, z: -1}
 --- !u!1 &5356713429651525092
 GameObject:
   m_ObjectHideFlags: 0

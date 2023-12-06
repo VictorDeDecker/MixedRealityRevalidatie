@@ -439,6 +439,10 @@ MonoBehaviour:
   TargetTag: Target
   Speed: 2
   Rotation: 90
+  RockDirection: {x: 0, y: 0, z: 1}
+  ShipDirection: {x: 0, y: 0, z: 1}
+  BalloonDirection: {x: 0, y: 0, z: 1}
+  SeagullDirection: {x: 0, y: 0, z: -1}
 --- !u!1 &6731848189757478734
 GameObject:
   m_ObjectHideFlags: 0

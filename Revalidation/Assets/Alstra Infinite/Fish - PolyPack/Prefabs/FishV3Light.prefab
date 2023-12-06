@@ -440,7 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetTag: Target
   Speed: 2
-  Rotation: 90
+  Rotation: -90
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: 1}

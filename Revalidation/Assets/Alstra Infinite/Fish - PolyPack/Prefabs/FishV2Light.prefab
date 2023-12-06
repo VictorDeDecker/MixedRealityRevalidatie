@@ -517,6 +517,7 @@ GameObject:
   - component: {fileID: 8293914903625925869}
   - component: {fileID: 5443628253533537210}
   - component: {fileID: 846834110945777477}
+  - component: {fileID: -7877641315702267460}
   m_Layer: 0
   m_Name: FishV2Light
   m_TagString: Untagged
@@ -556,7 +557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetTag: Target
   Speed: 2
-  Rotation: 90
+  Rotation: -90
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: 1}
@@ -627,6 +628,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-7877641315702267460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8293914903625925867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9286f2bc44280429d7d1f266edc68b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTag: Target
+  Speed: 1
+  Rotation: 0
+  RockDirection: {x: 0, y: 0, z: 1}
+  ShipDirection: {x: 0, y: 0, z: 1}
+  BalloonDirection: {x: 0, y: 0, z: -1}
+  SeagullDirection: {x: 0, y: 0, z: -1}
 --- !u!1 &8891697166912946866
 GameObject:
   m_ObjectHideFlags: 0
