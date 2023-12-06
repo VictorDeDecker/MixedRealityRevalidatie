@@ -14,6 +14,7 @@ public class UpdateProgressBar : MonoBehaviour
     public int maxObjectsToDodge = 10;
 
     private int dodgedObjects = 0;
+    private int hitObjects = 0;
 
     public float timeToComplete = 60f;
     public float currentTime = 0f;
@@ -25,48 +26,64 @@ public class UpdateProgressBar : MonoBehaviour
         timeToComplete = setSpawner.LevelLengthInSec;
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
-        maxObjectsToDodge = Mathf.FloorToInt(setSpawner.AmountOfSets * (setSpawner.SetWidth * setSpawner.MaxPercentageOfMissingObjects));
+        maxObjectsToDodge = setSpawner.AmountOfSets;
         UpdateProgress();
     }
 
     private void Update()
     {
+        timeToComplete = setSpawner.LevelLengthInSec;
+        maxObjectsToDodge = setSpawner.AmountOfSets;
         if (!won)
-            currentTime += ((int)Time.deltaTime);
+            currentTime += Time.deltaTime;
     }
 
     public void DodgeObject()
     {
-        maxObjectsToDodge = Mathf.FloorToInt(setSpawner.AmountOfSets * (setSpawner.SetWidth * setSpawner.MaxPercentageOfMissingObjects));
         dodgedObjects++;
 
         UpdateProgress();
 
-        if (dodgedObjects >= maxObjectsToDodge && !lost)
+        if ((dodgedObjects - hitObjects) >= maxObjectsToDodge && !lost)
         {
+            setSpawner._spawning = false;
             won = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                Destroy(touchObjects[i].gameObject);
+            }
+
             WinScreen.gameObject.SetActive(true);
         }
 
         if (currentTime > timeToComplete)
         {
+            setSpawner._spawning = false;
             lost = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                Destroy(touchObjects[i].gameObject);
+            }
             LoseScreen.gameObject.SetActive(true);
         }
     }
 
     public void HitObject()
     {
-        dodgedObjects--;
+        hitObjects++;
+        UpdateProgress();
     }
 
     private void UpdateProgress()
     {
+        Debug.Log(currentTime.ToString());
         if (!won && !lost)
         {
-            maxObjectsToDodge = Mathf.FloorToInt(setSpawner.AmountOfSets * (setSpawner.SetWidth * setSpawner.MaxPercentageOfMissingObjects));
-            Debug.Log(maxObjectsToDodge + ", dodged: " + dodgedObjects);
-            float progress = (float)dodgedObjects / maxObjectsToDodge;
+            float progress = (float)(dodgedObjects - hitObjects) / maxObjectsToDodge;
             progressBar.fillAmount = progress;
         }
     }
