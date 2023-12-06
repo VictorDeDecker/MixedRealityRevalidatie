@@ -148,6 +148,34 @@
           }}s</strong
         >
       </div>
+
+      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
+    </div>
+
+    <div class="box">
+      It will take atleast {{ InfiniteSpawnWaitTime * objectsAmount }} seconds
+      to generate all the rows.
+    </div>
+
+    <div class="box mt-5">
+      <label class="label">Length of the level in seconds</label>
+      <input
+        type="range"
+        min="10"
+        max="600"
+        value="60"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="timeInSeconds"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="timeInSeconds" />
+      </div>
+
+      <button class="button is-primary" (click)="applyAmountOfSeconds()">
+        Apply
+      </button>
     </div>
   </div>
 
