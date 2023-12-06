@@ -1,3 +1,4 @@
+<div *ngIf="response != null">Status: {{ response }}</div>
 <div class="columns">
   <div class="column is-two-fifths">
     <div class="box mt-5">
@@ -20,7 +21,9 @@
     </div>
 
     <div class="box mt-5">
-      <label class="label">Amount of rows a patient has to dodge </label>
+      <label class="label"
+        >Amount of rows a patient has to dodge to complete the level</label
+      >
       <input
         type="range"
         min="1"
@@ -112,6 +115,43 @@
       <button class="button is-primary" (click)="applySetWidth()">Apply</button>
     </div>
 
+    <div class="box mt-5">
+      <label class="label">Length of the level in seconds</label>
+      <input
+        type="range"
+        min="10"
+        max="600"
+        value="60"
+        class="slider"
+        id="myRange"
+        [(ngModel)]="timeInSeconds"
+      />
+
+      <div class="control pl-3">
+        <input class="input" type="number" [(ngModel)]="timeInSeconds" />
+      </div>
+
+      <button class="button is-primary" (click)="applyAmountOfSeconds()">
+        Apply
+      </button>
+
+      <div>
+        The user has to dodge all the objects in this timeframe. It is adviced
+        to increase this time if the time between rows (currently:
+        <strong>{{ InfiniteSpawnWaitTime }}s</strong>) increases. It will take
+        atleast <strong>{{ InfiniteSpawnWaitTime * objectsAmount }}s</strong> to
+        generate all the rows. Half of this time will automatically be added to
+        the value above. Total length of the level will be:
+        <strong
+          >{{
+            timeInSeconds + (InfiniteSpawnWaitTime * objectsAmount) / 2
+          }}s</strong
+        >
+      </div>
+
+      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
+    </div>
+
     <div class="box">
       It will take atleast {{ InfiniteSpawnWaitTime * objectsAmount }} seconds
       to generate all the rows.
@@ -141,6 +181,7 @@
 
   <div class="column">
     <div class="box mt-5">
+      <h2>Level select</h2>
       <button class="button is-primary mr-4" (click)="changeLevel('level1')">
         Level 1
       </button>
@@ -155,6 +196,18 @@
       </button>
       <button class="button is-primary" (click)="changeLevel('quit')">
         Quit
+      </button>
+    </div>
+    <div class="box mt-5">
+      <h2>Difficulty presets</h2>
+      <button class="button is-primary mr-4" (click)="veryEasy()">
+        Very Easy
+      </button>
+      <button class="button is-primary mr-4" (click)="easy()">Easy</button>
+      <button class="button is-primary mr-4" (click)="normal()">Normal</button>
+      <button class="button is-primary mr-4" (click)="hard()">Hard</button>
+      <button class="button is-primary mr-4" (click)="veryHard()">
+        Very Hard
       </button>
     </div>
   </div>

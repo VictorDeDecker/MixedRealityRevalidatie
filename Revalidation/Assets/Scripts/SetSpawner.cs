@@ -16,7 +16,7 @@ public class SetSpawner : MonoBehaviour
 
     public int InfiniteSpawnWaitTime = 2;
 
-    private bool _spawning = false;
+    public bool _spawning = false;
 
     void Start()
     {
