@@ -12,6 +12,7 @@ TagManager:
   - Balloon
   - Seagull
   - Submarine
+  - AnchorTarget
   layers:
   - Default
   - TransparentFX

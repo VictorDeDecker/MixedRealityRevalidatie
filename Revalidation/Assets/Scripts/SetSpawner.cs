@@ -10,46 +10,26 @@ public class SetSpawner : MonoBehaviour
 
     public int AmountOfSets = 45;
 
-    public int LevelLengthInSec = 180;
+    public int LevelLengthInSec = 200;
 
-    public bool InfiniteSpawn = false;
-
-    public float MaxPercentageOfMissingObjects = 0.33f;
+    public float MaxPercentageOfMissingObjects = 0.5f;
 
     public int InfiniteSpawnWaitTime = 2;
 
     private bool _spawning = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(StartSpawning());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private IEnumerator StartSpawning()
     {
         _spawning = true;
-        if (InfiniteSpawn)
+        while (_spawning)
         {
-            while (_spawning)
-            {
-                SpawnSet();
-                yield return new WaitForSeconds(InfiniteSpawnWaitTime);
-            }
-        }
-        else
-        {
-            for (int i = 0; i <= AmountOfSets; i++)
-            {
-                SpawnSet();
-                yield return new WaitForSeconds(LevelLengthInSec / AmountOfSets);
-            }
+            SpawnSet();
+            yield return new WaitForSeconds(InfiniteSpawnWaitTime);
         }
     }
 
@@ -71,7 +51,10 @@ public class SetSpawner : MonoBehaviour
         {
             spawnLocation = new Vector3(spawnLocation.x + 1, spawnLocation.y, spawnLocation.z);
             if (spawnSet[i] != null)
+            {
                 Instantiate(spawnSet[i].gameObject, spawnLocation, Quaternion.identity);
+            }
+
         }
     }
 
