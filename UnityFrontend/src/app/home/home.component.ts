@@ -11,9 +11,8 @@ import { SceneChange } from '../SceneChange';
 export class HomeComponent {
   speed:number = 2;
   objectsAmount:number = 30;
-  timeInSeconds:number = 60;
+  timeInSeconds:number = 30;
   MaxAmountOfMissingObjects:number = 50;
-  InfiniteSpawn:boolean = false;
   Width:number = 5;
   InfiniteSpawnWaitTime:number = 2;
   response?:string;
@@ -61,23 +60,6 @@ export class HomeComponent {
       script: "touchObject",
       parameter: "speed",
       value: this.speed
-    };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
-  }
-
-  async applyInfiniteSpawn(){
-    let value:number;
-    if(this.InfiniteSpawn){
-      value = 1;
-    } else{
-      value = 0;
-    }
-
-    let parameterChangeRequest:ParameterChangeRequest = {
-      script: "objectSpawner",
-      parameter: "InfiniteSpawn",
-      value: value
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);

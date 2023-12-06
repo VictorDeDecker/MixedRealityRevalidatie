@@ -10,9 +10,14 @@ public class TouchObject : MonoBehaviour
     public Vector3 ShipDirection = new Vector3(0f, 0f, 1f);
     public Vector3 BalloonDirection = new Vector3(0f, 0f, -1f);
     public Vector3 SeagullDirection = new Vector3(0f, 0f, -1f);
+    public UpdateProgressBar ProgressBar;
 
     void Start()
     {
+        if (ProgressBar == null)
+        {
+            ProgressBar = FindObjectOfType<UpdateProgressBar>();
+        }
         transform.Rotate(0, Rotation, 0);
 
         if (transform.CompareTag("Ship"))
@@ -70,7 +75,7 @@ public class TouchObject : MonoBehaviour
     {
         if (other.gameObject.CompareTag(TargetTag))
         {
-            Debug.Log($"{other} touched {this}");
+            ProgressBar.DodgeObject();
             _touched = true;
         }
     }
