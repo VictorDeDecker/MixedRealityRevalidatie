@@ -2,11 +2,13 @@
 
 ## Inhouds opgave
 
-- [Post Processing](#post-processing)
-- [Angular Frontend](#angular-frontend)
-- [Scripts](#scripts)
-  - [Fish generator](#fish-generator-setspawner-and-touchobject-scripts)
-  - [Submarine movement](#unity-server)
+- [Documentation](#documentation)
+  - [Inhouds opgave](#inhouds-opgave)
+  - [Post processing](#post-processing)
+  - [Angular Frontend](#angular-frontend)
+  - [Scripts](#scripts)
+    - [Fish generator (SetSpawner and TouchObject scripts)](#fish-generator-setspawner-and-touchobject-scripts)
+    - [Unity server](#unity-server)
 
 ## Post processing
 
