@@ -70,6 +70,7 @@ public class SetSpawner : MonoBehaviour
             {
                 Instantiate(spawnSet[i].gameObject, spawnLocation, Quaternion.identity);
             }
+
             if (HeightRows)
             {
 
