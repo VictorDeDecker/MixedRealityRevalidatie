@@ -16,7 +16,6 @@ public class UnityServer : MonoBehaviour
     private HttpListener listener;
     private bool isRunning;
     private readonly LevelManager levelManager;
-    public RenderTextureController renderController;
 
     void Awake()
     {

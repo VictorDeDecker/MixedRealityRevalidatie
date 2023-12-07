@@ -27,13 +27,11 @@ public class TouchObject : MonoBehaviour
 
         if (transform.CompareTag("Balloon"))
         {
-            transform.Translate(new Vector3(2.5f, 0.5f, 0));
             transform.Rotate(new Vector3(-90f, 0, 0));
         }
 
         if (transform.CompareTag("Seagull"))
         {
-            transform.Translate(new Vector3(3.157137f, 0, 7.726573f));
             transform.Rotate(new Vector3(0, 180f, 0));
         }
     }

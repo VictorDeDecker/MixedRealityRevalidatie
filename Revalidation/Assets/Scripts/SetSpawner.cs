@@ -18,7 +18,7 @@ public class SetSpawner : MonoBehaviour
 
     public bool ContainsDuckSets = false;
 
-    private bool _spawning = false;
+    public bool _spawning = false;
 
     void Start()
     {
