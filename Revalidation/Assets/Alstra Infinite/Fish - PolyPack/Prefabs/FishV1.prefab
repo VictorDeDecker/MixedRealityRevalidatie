@@ -565,7 +565,7 @@ Transform:
   m_GameObject: {fileID: 7976751554579448252}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 20.25}
-  m_LocalScale: {x: 2, y: 2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1821733231387167640}
@@ -589,6 +589,10 @@ MonoBehaviour:
   TargetTag: Target
   Speed: 2
   Rotation: 90
+  RockDirection: {x: 0, y: 0, z: 1}
+  ShipDirection: {x: 0, y: 0, z: 1}
+  BalloonDirection: {x: 0, y: 0, z: -1}
+  SeagullDirection: {x: 0, y: 0, z: -1}
 --- !u!95 &7976751554579448254
 Animator:
   serializedVersion: 4

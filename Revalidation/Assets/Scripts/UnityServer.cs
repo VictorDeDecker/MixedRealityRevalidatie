@@ -1,30 +1,25 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UnityServer : MonoBehaviour
 {
-    private const string angularEndpoint = "http://localhost:4200/textureUpdate";
     private const string prefix = "http://localhost:8085/";
     private static UnityServer instance;
     public SetSpawner objectSpawner;
     private List<TouchObject> touchObject;
     private HttpListener listener;
     private bool isRunning;
-    private readonly LevelManager levelManager = new();
-    public RenderTextureController renderController;
-    private const float frameRate = 24f;
-    private float frameInterval;
+    private readonly LevelManager levelManager;
 
     void Awake()
     {
+        gameObject.AddComponent<LevelManager>();
         if (instance == null)
         {
             instance = this;
@@ -35,13 +30,6 @@ public class UnityServer : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (renderController == null)
-        {
-            renderController = FindObjectOfType<RenderTextureController>();
-        }
-
-        frameInterval = 1f / frameRate;
-        //StartCoroutine(SendTexturePeriodically());
         if (objectSpawner != null)
         {
             touchObject = objectSpawner.Objects;
@@ -50,13 +38,6 @@ public class UnityServer : MonoBehaviour
 
     void Start()
     {
-        if (renderController == null)
-        {
-            renderController = FindObjectOfType<RenderTextureController>();
-        }
-
-        frameInterval = 1f / frameRate;
-        //StartCoroutine(SendTexturePeriodically());
         System.Threading.ThreadPool.QueueUserWorkItem(o => StartServer());
     }
 
@@ -207,13 +188,6 @@ public class UnityServer : MonoBehaviour
                     {
                         objectSpawner.LevelLengthInSec = (int)request.parameterValue;
                     }
-                    else if (request.parameterToChange.ToLower() == "InfiniteSpawn".ToLower())
-                    {
-                        if ((int)request.parameterValue == 0)
-                            objectSpawner.InfiniteSpawn = false;
-                        else if ((int)request.parameterValue == 1)
-                            objectSpawner.InfiniteSpawn = true;
-                    }
                     else if (request.parameterToChange.ToLower() == "MaxPercentageOfMissingObjects".ToLower())
                     {
                         objectSpawner.MaxPercentageOfMissingObjects = request.parameterValue;
@@ -316,48 +290,6 @@ public class UnityServer : MonoBehaviour
         output.Write(buffer, 0, buffer.Length);
         output.Close();
     }
-    private IEnumerator SendTexturePeriodically()
-    {
-        while (true)
-        {
-            SendTextureToAngular();
-            yield return new WaitForSeconds(frameInterval);
-        }
-    }
-
-    void SendTextureToAngular()
-    {
-        try
-        {
-            byte[] textureData = renderController.capturedTexture.EncodeToPNG();
-
-            // Create a custom class to hold the texture data and any additional information
-            TextureUpdateRequest textureUpdateRequest = new TextureUpdateRequest
-            {
-                TextureData = Convert.ToBase64String(textureData), // Convert to Base64 for easy transmission
-                Width = renderController.capturedTexture.width,
-                Height = renderController.capturedTexture.height
-            };
-
-            HttpClient client = new HttpClient();
-            string jsonRequest = JsonConvert.SerializeObject(textureUpdateRequest);
-            StringContent content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PostAsync(angularEndpoint, content).Result;
-
-            if (response.IsSuccessStatusCode)
-            {
-                Debug.Log("Texture data sent successfully to Angular application.");
-            }
-            else
-            {
-                Debug.LogError($"Failed to send texture data to Angular application. Status Code: {response.StatusCode}");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error sending data to Angular application: {e.Message}");
-        }
-    }
 }
 
 [Serializable]
@@ -376,12 +308,4 @@ public class SceneChange
 {
     [JsonProperty(PropertyName = "scene")]
     public string destinationScene;
-}
-
-[Serializable]
-public class TextureUpdateRequest
-{
-    public string TextureData;
-    public int Width;
-    public int Height;
 }

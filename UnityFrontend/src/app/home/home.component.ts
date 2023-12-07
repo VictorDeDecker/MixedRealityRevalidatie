@@ -11,9 +11,8 @@ import { SceneChange } from '../SceneChange';
 export class HomeComponent {
   speed:number = 2;
   objectsAmount:number = 30;
-  timeInSeconds:number = 60;
+  timeInSeconds:number = 30;
   MaxAmountOfMissingObjects:number = 50;
-  InfiniteSpawn:boolean = false;
   Width:number = 5;
   InfiniteSpawnWaitTime:number = 2;
   response?:string;
@@ -22,12 +21,11 @@ export class HomeComponent {
   constructor(private unityService:UnityService){
     setInterval(()=>{
       this.testConnection()
-    },2500)
+    },5000)
   }
 
   async testConnection(){
     (await this.unityService.testConnection()).subscribe(value => {
-      console.log(value.message)
       if(value.message = "OK") {
         this.response = "Connected"
       } else {
@@ -40,7 +38,7 @@ export class HomeComponent {
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
       parameter: "LevelLengthInSec",
-      value: this.timeInSeconds
+      value: (this.timeInSeconds + (this.InfiniteSpawnWaitTime * this.objectsAmount)/2)
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
@@ -61,23 +59,6 @@ export class HomeComponent {
       script: "touchObject",
       parameter: "speed",
       value: this.speed
-    };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
-  }
-
-  async applyInfiniteSpawn(){
-    let value:number;
-    if(this.InfiniteSpawn){
-      value = 1;
-    } else{
-      value = 0;
-    }
-
-    let parameterChangeRequest:ParameterChangeRequest = {
-      script: "objectSpawner",
-      parameter: "InfiniteSpawn",
-      value: value
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
@@ -119,5 +100,67 @@ export class HomeComponent {
     };
 
     (await this.unityService.sendLevelToUnity(changeLevel)).subscribe(value => this.response = value.message);
+  }
+
+  async veryEasy(){
+    this.speed = 2;
+    this.objectsAmount = 20;
+    this.timeInSeconds = 30;
+    this.MaxAmountOfMissingObjects = 65;
+    this.InfiniteSpawnWaitTime = 4;
+    this.applySpeed();
+    this.applyAmountOfObjects();
+    this.applyAmountOfSeconds();
+    this.applyPercentageOfMissingObjects();
+    this.applyInfiniteSpawnWaitTime();
+  }
+
+  async easy(){
+    this.speed = 3;
+    this.objectsAmount = 40;
+    this.timeInSeconds = 30;
+    this.MaxAmountOfMissingObjects = 60;
+    this.InfiniteSpawnWaitTime = 4;
+    this.applySpeed();
+    this.applyAmountOfObjects();
+    this.applyAmountOfSeconds();
+    this.applyPercentageOfMissingObjects();
+    this.applyInfiniteSpawnWaitTime();
+  }
+  async normal(){
+    this.speed = 4;
+    this.objectsAmount = 50;
+    this.timeInSeconds = 20;
+    this.MaxAmountOfMissingObjects = 50;
+    this.InfiniteSpawnWaitTime = 3;
+    this.applySpeed();
+    this.applyAmountOfObjects();
+    this.applyAmountOfSeconds();
+    this.applyPercentageOfMissingObjects();
+    this.applyInfiniteSpawnWaitTime();
+  }
+  async hard(){
+    this.speed = 4;
+    this.objectsAmount = 50;
+    this.timeInSeconds = 10;
+    this.MaxAmountOfMissingObjects = 40;
+    this.InfiniteSpawnWaitTime = 2;
+    this.applySpeed();
+    this.applyAmountOfObjects();
+    this.applyAmountOfSeconds();
+    this.applyPercentageOfMissingObjects();
+    this.applyInfiniteSpawnWaitTime();
+  }
+  async veryHard(){
+    this.speed = 5;
+    this.objectsAmount = 50;
+    this.timeInSeconds = 1;
+    this.MaxAmountOfMissingObjects = 30;
+    this.InfiniteSpawnWaitTime = 2;
+    this.applySpeed();
+    this.applyAmountOfObjects();
+    this.applyAmountOfSeconds();
+    this.applyPercentageOfMissingObjects();
+    this.applyInfiniteSpawnWaitTime();
   }
 }
