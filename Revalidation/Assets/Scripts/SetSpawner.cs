@@ -16,6 +16,8 @@ public class SetSpawner : MonoBehaviour
 
     public int InfiniteSpawnWaitTime = 2;
 
+    public bool ContainsDuckSets = false;
+
     public bool _spawning = false;
 
     void Start()
@@ -35,7 +37,18 @@ public class SetSpawner : MonoBehaviour
 
     private void SpawnSet()
     {
-        var spawnSet = GenerateSet();
+        TouchObject[] spawnSet;
+        if (ContainsDuckSets)
+        {
+            spawnSet = Random.Range(0, 10) == 0 ? GenerateFullSet() : GenerateSet();
+        }
+        else
+        {
+            spawnSet = GenerateSet();
+        }
+
+        var bottomSpawnSet = GenerateSet();
+
         var vertices = new List<Vector3>(GetComponent<MeshFilter>().sharedMesh.vertices);
 
         var leftTop = transform.TransformPoint(vertices[0]);
@@ -46,16 +59,36 @@ public class SetSpawner : MonoBehaviour
         var zAxis = leftBottom - leftTop;
 
         var spawnLocation = leftTop + xAxis + zAxis / 2;
+        var bottomSpawnLocation = leftTop + xAxis + zAxis / 2 - new Vector3(0, 1, 0);
 
         for (int i = 0; i < spawnSet.Length; i++)
         {
             spawnLocation = new Vector3(spawnLocation.x + 1, spawnLocation.y, spawnLocation.z);
-            if (spawnSet[i] != null)
+            bottomSpawnLocation = new Vector3(bottomSpawnLocation.x + 1, bottomSpawnLocation.y, bottomSpawnLocation.z);
+            if (spawnSet[i] is not null)
             {
                 Instantiate(spawnSet[i].gameObject, spawnLocation, Quaternion.identity);
             }
 
+            if (bottomSpawnSet[i] is not null)
+            {
+                Instantiate(bottomSpawnSet[i].gameObject, bottomSpawnLocation, Quaternion.identity);
+            }
+
         }
+    }
+
+    // Full set requires the user to duck in order to dodge the set
+    private TouchObject[] GenerateFullSet()
+    {
+        var returnObject = new TouchObject[SetWidth];
+
+        for (int i = 0; i < returnObject.Length; i++)
+        {
+            returnObject[i] = Objects[Random.Range(0, Objects.Count)];
+        }
+
+        return returnObject;
     }
 
     private TouchObject[] GenerateSet()
