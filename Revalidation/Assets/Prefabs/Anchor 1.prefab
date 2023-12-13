@@ -3822,7 +3822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTag: Target
-  Speed: 6
+  Speed: 2
   Rotation: 0
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}

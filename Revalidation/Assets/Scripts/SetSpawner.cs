@@ -19,6 +19,7 @@ public class SetSpawner : MonoBehaviour
     public bool ContainsDuckSets = false;
 
     public bool _spawning = false;
+    public bool HeightRows = false;
 
     void Start()
     {
@@ -69,12 +70,14 @@ public class SetSpawner : MonoBehaviour
             {
                 Instantiate(spawnSet[i].gameObject, spawnLocation, Quaternion.identity);
             }
-
-            if (bottomSpawnSet[i] is not null)
+            if (HeightRows)
             {
-                Instantiate(bottomSpawnSet[i].gameObject, bottomSpawnLocation, Quaternion.identity);
-            }
 
+                if (bottomSpawnSet[i] is not null)
+                {
+                    Instantiate(bottomSpawnSet[i].gameObject, bottomSpawnLocation, Quaternion.identity);
+                }
+            }
         }
     }
 
