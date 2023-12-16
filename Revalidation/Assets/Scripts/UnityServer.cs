@@ -11,7 +11,7 @@ public class UnityServer : MonoBehaviour
 {
     private const string prefix = "http://localhost:8085/";
     private static UnityServer instance;
-    public SetSpawner objectSpawner;
+    public ObjectSpawnerV2 objectSpawner;
     private List<TouchObject> touchObject;
     private HttpListener listener;
     private bool isRunning;
@@ -180,25 +180,33 @@ public class UnityServer : MonoBehaviour
                     }
                     break;
                 case "objectSpawner":
-                    if (request.parameterToChange.ToLower() == "AmountOfSets".ToLower())
-                    {
-                        objectSpawner.AmountOfSets = (int)request.parameterValue;
-                    }
-                    else if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
+                    if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
                     {
                         objectSpawner.LevelLengthInSec = (int)request.parameterValue;
                     }
-                    else if (request.parameterToChange.ToLower() == "MaxPercentageOfMissingObjects".ToLower())
+                    else if (request.parameterToChange.ToLower() == "Height".ToLower())
                     {
-                        objectSpawner.MaxPercentageOfMissingObjects = request.parameterValue;
+                        objectSpawner.Height = request.parameterValue;
                     }
-                    else if (request.parameterToChange.ToLower() == "SetWidth".ToLower())
+                    else if (request.parameterToChange.ToLower() == "Radius".ToLower())
                     {
-                        objectSpawner.SetWidth = (int)request.parameterValue;
+                        objectSpawner.SpawnRadius = request.parameterValue;
                     }
-                    else if (request.parameterToChange.ToLower() == "InfiniteSpawnWaitTime".ToLower())
+                    else if (request.parameterToChange.ToLower() == "ShoulderWidth".ToLower())
                     {
-                        objectSpawner.InfiniteSpawnWaitTime = (int)request.parameterValue;
+                        objectSpawner.SpaceBetween = request.parameterValue;
+                    }
+                    else if (request.parameterToChange.ToLower() == "Ducking".ToLower())
+                    {
+                        objectSpawner.IncludeDucking = request.parameterValue != 0;
+                    }
+                    else if (request.parameterToChange.ToLower() == "Movement".ToLower())
+                    {
+                        objectSpawner.IncludeMovement = request.parameterValue != 0;
+                    }
+                    else if (request.parameterToChange.ToLower() == "WaitBetweenSpawns".ToLower())
+                    {
+                        objectSpawner.TimeBetweenSpawnsInSec = (int)request.parameterValue;
                     }
                     break;
                 default:
@@ -225,7 +233,7 @@ public class UnityServer : MonoBehaviour
                         status = SceneManager.LoadSceneAsync("Level 1");
                         status.completed += (x) =>
                         {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
                             touchObject = objectSpawner.Objects;
                         };
                     }
@@ -238,7 +246,7 @@ public class UnityServer : MonoBehaviour
                         status = SceneManager.LoadSceneAsync("Level 2");
                         status.completed += (x) =>
                         {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
                             touchObject = objectSpawner.Objects;
                         };
                     });
@@ -249,7 +257,7 @@ public class UnityServer : MonoBehaviour
                         status = SceneManager.LoadSceneAsync("Level 3");
                         status.completed += (x) =>
                         {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<SetSpawner>();
+                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
                             touchObject = objectSpawner.Objects;
                         };
                     });

@@ -10,10 +10,10 @@ import { SceneChange } from '../SceneChange';
 })
 export class HomeComponent {
   speed:number = 2;
-  objectsAmount:number = 30;
+  height:number = 2;
   timeInSeconds:number = 30;
-  MaxAmountOfMissingObjects:number = 50;
-  Width:number = 5;
+  SpawnRadius:number = 2;
+  spaceBetweenCircles:number = 2;
   InfiniteSpawnWaitTime:number = 2;
   response?:string;
   changeParameterResponse?:string;
@@ -38,17 +38,17 @@ export class HomeComponent {
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
       parameter: "LevelLengthInSec",
-      value: (this.timeInSeconds + (this.InfiniteSpawnWaitTime * this.objectsAmount)/2)
+      value: (this.timeInSeconds + (this.InfiniteSpawnWaitTime * this.height)/2)
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
   }
 
-  async applyAmountOfObjects() {
+  async applyHeight() {
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
-      parameter: "AmountOfSets",
-      value: this.objectsAmount
+      parameter: "Height",
+      value: this.height
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
@@ -64,21 +64,21 @@ export class HomeComponent {
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
   }
 
-  async applyPercentageOfMissingObjects(){
+  async applySpawnRadius(){
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
-      parameter: "MaxPercentageOfMissingObjects",
-      value: this.MaxAmountOfMissingObjects/100
+      parameter: "Radius",
+      value: this.SpawnRadius
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
   }
 
-  async applySetWidth(){
+  async applyCircleWidth(){
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
-      parameter: "SetWidth",
-      value: this.Width
+      parameter: "ShoulderWidth",
+      value: this.spaceBetweenCircles
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
@@ -87,8 +87,8 @@ export class HomeComponent {
   async applyInfiniteSpawnWaitTime(){
     let parameterChangeRequest:ParameterChangeRequest = {
       script: "objectSpawner",
-      parameter: "SetWidth",
-      value: this.Width
+      parameter: "WaitBetweenSpawns",
+      value: this.InfiniteSpawnWaitTime
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
@@ -104,63 +104,63 @@ export class HomeComponent {
 
   async veryEasy(){
     this.speed = 2;
-    this.objectsAmount = 20;
+    this.height = 20;
     this.timeInSeconds = 30;
-    this.MaxAmountOfMissingObjects = 65;
+    this.SpawnRadius = 65;
     this.InfiniteSpawnWaitTime = 4;
     this.applySpeed();
-    this.applyAmountOfObjects();
+    this.applyHeight();
     this.applyAmountOfSeconds();
-    this.applyPercentageOfMissingObjects();
+    this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
   }
 
   async easy(){
     this.speed = 3;
-    this.objectsAmount = 40;
+    this.height = 40;
     this.timeInSeconds = 30;
-    this.MaxAmountOfMissingObjects = 60;
+    this.SpawnRadius = 60;
     this.InfiniteSpawnWaitTime = 4;
     this.applySpeed();
-    this.applyAmountOfObjects();
+    this.applyHeight();
     this.applyAmountOfSeconds();
-    this.applyPercentageOfMissingObjects();
+    this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
   }
   async normal(){
     this.speed = 4;
-    this.objectsAmount = 50;
+    this.height = 50;
     this.timeInSeconds = 20;
-    this.MaxAmountOfMissingObjects = 50;
+    this.SpawnRadius = 50;
     this.InfiniteSpawnWaitTime = 3;
     this.applySpeed();
-    this.applyAmountOfObjects();
+    this.applyHeight();
     this.applyAmountOfSeconds();
-    this.applyPercentageOfMissingObjects();
+    this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
   }
   async hard(){
     this.speed = 4;
-    this.objectsAmount = 50;
+    this.height = 50;
     this.timeInSeconds = 10;
-    this.MaxAmountOfMissingObjects = 40;
+    this.SpawnRadius = 40;
     this.InfiniteSpawnWaitTime = 2;
     this.applySpeed();
-    this.applyAmountOfObjects();
+    this.applyHeight();
     this.applyAmountOfSeconds();
-    this.applyPercentageOfMissingObjects();
+    this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
   }
   async veryHard(){
     this.speed = 5;
-    this.objectsAmount = 50;
+    this.height = 50;
     this.timeInSeconds = 1;
-    this.MaxAmountOfMissingObjects = 30;
+    this.SpawnRadius = 30;
     this.InfiniteSpawnWaitTime = 2;
     this.applySpeed();
-    this.applyAmountOfObjects();
+    this.applyHeight();
     this.applyAmountOfSeconds();
-    this.applyPercentageOfMissingObjects();
+    this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
   }
 }

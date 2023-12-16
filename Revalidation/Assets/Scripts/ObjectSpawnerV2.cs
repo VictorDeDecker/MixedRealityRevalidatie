@@ -13,6 +13,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public float SpaceBetween;
     public bool IncludeDucking = false;
     public bool IncludeMovement = false;
+    public bool IsSpawning = true;
 
 
     void Start()
@@ -22,8 +23,8 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private IEnumerator StartSpawning()
     {
-        
-        while (LevelLengthInSec > 0 || InfiniteSpawn)
+
+        while ((LevelLengthInSec > 0 || InfiniteSpawn) && IsSpawning)
         {
             LevelLengthInSec--;
             SpawnObject();
@@ -40,10 +41,10 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private Vector3 RandomSpawnPoint()
     {
-        Vector3 point = Random.value > 0.5 ? 
-            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(SpaceBetween / 2, 0, 0) : 
-            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(- SpaceBetween / 2, 0, 0);
+        Vector3 point = Random.value > 0.5 ?
+            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(SpaceBetween / 2, 0, 0) :
+            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(-SpaceBetween / 2, 0, 0);
 
-        return point + this.gameObject.transform.position + new Vector3(0 , Height, 0);
+        return point + this.gameObject.transform.position + new Vector3(0, Height, 0);
     }
 }

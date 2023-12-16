@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6751750825938235349}
   - component: {fileID: 6751750825938235348}
   - component: {fileID: 6751750825938235355}
-  - component: {fileID: 6751750825938235351}
   m_Layer: 0
   m_Name: SpawnPlane
   m_TagString: Untagged
@@ -99,19 +98,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &6751750825938235351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6751750825938235354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2420bada5a4424c40b0b17cd7188eae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnObjects:
-  - {fileID: 104517609856167801, guid: 94c015d94f6e5364e9b36b960bbe1b77, type: 3}
-  AmountOfObjects: 5
-  SpawnDurationInSec: 60
