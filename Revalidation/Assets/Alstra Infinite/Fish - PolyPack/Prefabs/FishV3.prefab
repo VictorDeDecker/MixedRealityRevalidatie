@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 5833018554113607172}
   m_Layer: 0
   m_Name: FishV3
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,6 +445,7 @@ MonoBehaviour:
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!54 &6258850897548676506
 Rigidbody:
   m_ObjectHideFlags: 0

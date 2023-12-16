@@ -21,39 +21,36 @@
     </div>
 
     <div class="box mt-5">
-      <label class="label"
-        >Amount of rows a patient has to dodge to complete the level</label
-      >
+      <label class="label">Height of patiënt</label>
       <input
         type="range"
         min="1"
-        max="500"
-        value="30"
+        max="3"
+        value="2"
+        step="0.05"
         class="slider"
         id="myRange"
-        [(ngModel)]="objectsAmount"
+        [(ngModel)]="height"
       />
 
       <div class="control pl-3">
-        <input class="input" type="number" [(ngModel)]="objectsAmount" />
+        <input class="input" type="number" [(ngModel)]="height" />
       </div>
 
-      <button class="button is-primary" (click)="applyAmountOfObjects()">
-        Apply
-      </button>
+      <button class="button is-primary" (click)="applyHeight()">Apply</button>
     </div>
 
     <div class="box mt-5">
-      <label class="label">Amount of missing objects (in percentage)</label>
+      <label class="label">Spawn radius of the fish</label>
       <input
         type="range"
         min="0"
-        max="100"
-        value="50"
-        step="1"
+        max="10"
+        value="2"
+        step="0.05"
         class="slider"
         id="myRange"
-        [(ngModel)]="MaxAmountOfMissingObjects"
+        [(ngModel)]="SpawnRadius"
       />
 
       <div class="control pl-3">
@@ -61,35 +58,35 @@
           class="input"
           type="number"
           step="0.05"
-          [(ngModel)]="MaxAmountOfMissingObjects"
+          [(ngModel)]="SpawnRadius"
         />
       </div>
 
-      <button
-        class="button is-primary"
-        (click)="applyPercentageOfMissingObjects()"
-      >
+      <button class="button is-primary" (click)="applySpawnRadius()">
         Apply
       </button>
     </div>
 
     <div class="box mt-5">
-      <label class="label">Amount of objects per row (=width of the row)</label>
+      <label class="label">Space between circles</label>
       <input
         type="range"
         min="1"
-        max="15"
-        value="5"
+        max="10"
+        value="3"
+        step="0,05"
         class="slider"
         id="myRange"
-        [(ngModel)]="Width"
+        [(ngModel)]="spaceBetweenCircles"
       />
 
       <div class="control pl-3">
-        <input class="input" type="number" [(ngModel)]="Width" />
+        <input class="input" type="number" [(ngModel)]="spaceBetweenCircles" />
       </div>
 
-      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
+      <button class="button is-primary" (click)="applyCircleWidth()">
+        Apply
+      </button>
     </div>
 
     <div class="box mt-5">
@@ -112,51 +109,9 @@
         />
       </div>
 
-      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
-    </div>
-
-    <<<<<<< HEAD =======
-    <div class="box mt-5">
-      <label class="label">Length of the level in seconds</label>
-      <input
-        type="range"
-        min="10"
-        max="600"
-        value="60"
-        class="slider"
-        id="myRange"
-        [(ngModel)]="timeInSeconds"
-      />
-
-      <div class="control pl-3">
-        <input class="input" type="number" [(ngModel)]="timeInSeconds" />
-      </div>
-
-      <button class="button is-primary" (click)="applyAmountOfSeconds()">
+      <button class="button is-primary" (click)="applyInfiniteSpawnWaitTime()">
         Apply
       </button>
-
-      <div>
-        The user has to dodge all the objects in this timeframe. It is adviced
-        to increase this time if the time between rows (currently:
-        <strong>{{ InfiniteSpawnWaitTime }}s</strong>) increases. It will take
-        atleast <strong>{{ InfiniteSpawnWaitTime * objectsAmount }}s</strong> to
-        generate all the rows. Half of this time will automatically be added to
-        the value above. Total length of the level will be:
-        <strong
-          >{{
-            timeInSeconds + (InfiniteSpawnWaitTime * objectsAmount) / 2
-          }}s</strong
-        >
-      </div>
-
-      <button class="button is-primary" (click)="applySetWidth()">Apply</button>
-    </div>
-
-    >>>>>>> main
-    <div class="box">
-      It will take atleast {{ InfiniteSpawnWaitTime * objectsAmount }} seconds
-      to generate all the rows.
     </div>
 
     <div class="box mt-5">
@@ -178,6 +133,13 @@
       <button class="button is-primary" (click)="applyAmountOfSeconds()">
         Apply
       </button>
+    </div>
+    <div class="box mt-5">
+      <label class="label">Include ducking in the level</label>
+      <input type="checkbox" />
+
+      <label class="label">Include movement in the level</label>
+      <input type="checkbox" />
     </div>
   </div>
 
