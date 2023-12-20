@@ -4,49 +4,91 @@ using UnityEngine.UI;
 public class UpdateProgressBar : MonoBehaviour
 {
     public Image progressBar;
-
     public Canvas WinScreen;
-
     public Canvas LoseScreen;
+    public ObjectSpawnerV2 ObjectSpawnerV2;
 
-    public SetSpawner setSpawner;
+    public float TimeToComplete = 60f;
+    public float CurrentTime = 0f;
 
-    public int maxObjectsToDodge = 10;
+    //The amount of fishes a patiënt has to hit
+    public float AmountOfRedFishesToHit = 0f;
+    public float AmountOfPinkFishesToHit = 0f;
+    public float AmountOfGreenFishesToHit = 0f;
+    public float AmountOfYellowFishesToHit = 0f;
 
-    private int dodgedObjects = 0;
-    private int hitObjects = 0;
+    //The actual amount the patiënt has hit
+    private float RedFishesHit = 0f;
+    private float PinkFishesHit = 0f;
+    private float GreenFishesHit = 0f;
+    private float YellowFishesHit = 0f;
 
-    public float timeToComplete = 60f;
-    public float currentTime = 0f;
+    private float amountOfObjectsToHit = 10;
+    private float missedObjects = 0;
+    private float hitObjects = 0;
+    private float hitObjectWithHead = 0;
+    private float hitObstacle = 0;
+    private float hitNotTargetFish = 0;
     private bool won = false;
     private bool lost = false;
+    private float hitWithRightHand = 0;
+    private float hitWithLeftHand = 0;
 
     void Start()
     {
-        timeToComplete = setSpawner.LevelLengthInSec;
+        TimeToComplete = ObjectSpawnerV2.LevelLengthInSec;
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
-        maxObjectsToDodge = setSpawner.AmountOfSets;
+        amountOfObjectsToHit = AmountOfRedFishesToHit + AmountOfPinkFishesToHit + AmountOfGreenFishesToHit + AmountOfYellowFishesToHit;
         UpdateProgress();
     }
 
     private void Update()
     {
-        timeToComplete = setSpawner.LevelLengthInSec;
-        maxObjectsToDodge = setSpawner.AmountOfSets;
+        TimeToComplete = ObjectSpawnerV2.LevelLengthInSec;
         if (!won)
-            currentTime += Time.deltaTime;
+            CurrentTime += Time.deltaTime;
     }
 
-    public void DodgeObject()
+    public void MissedObject(bool IsTargetFish)
     {
-        dodgedObjects++;
+        if (IsTargetFish)
+        {
+            missedObjects++;
+        }
+
 
         UpdateProgress();
+    }
 
-        if ((dodgedObjects - hitObjects) >= maxObjectsToDodge && !lost)
+    public void HitNotTargetFish()
+    {
+        hitNotTargetFish++;
+        UpdateProgress();
+    }
+
+    public void HitObstacle()
+    {
+        hitObstacle++;
+        UpdateProgress();
+    }
+
+    public void HitObjectWithHead()
+    {
+        hitObjectWithHead++;
+        UpdateProgress();
+    }
+
+    public void HitObject(string hand, string color)
+    {
+        hitObjects++;
+        UpdateColorHit(color);
+
+        UpdateHandHit(hand);
+
+        if (hitObjects > amountOfObjectsToHit && !lost && CheckIfHasWon())
         {
-            setSpawner._spawning = false;
+            ObjectSpawnerV2.IsSpawning = false;
             won = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
@@ -58,9 +100,9 @@ public class UpdateProgressBar : MonoBehaviour
             WinScreen.gameObject.SetActive(true);
         }
 
-        if (currentTime > timeToComplete)
+        if (CurrentTime > TimeToComplete)
         {
-            setSpawner._spawning = false;
+            ObjectSpawnerV2.IsSpawning = false;
             lost = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
@@ -70,21 +112,53 @@ public class UpdateProgressBar : MonoBehaviour
             }
             LoseScreen.gameObject.SetActive(true);
         }
+        UpdateProgress();
     }
 
-    public void HitObject()
+    private void UpdateColorHit(string color)
     {
-        hitObjects++;
-        UpdateProgress();
+        switch (color.ToLower())
+        {
+            case "Red":
+                RedFishesHit++;
+                break;
+            case "Pink":
+                PinkFishesHit++;
+                break;
+            case "Green":
+                GreenFishesHit++;
+                break;
+            case "Yellow":
+                YellowFishesHit++;
+                break;
+        }
+    }
+
+    private void UpdateHandHit(string hand)
+    {
+        if (hand.ToLower() == "right")
+            hitWithRightHand++;
+        else if (hand.ToLower() == "left")
+            hitWithLeftHand++;
     }
 
     private void UpdateProgress()
     {
-        Debug.Log(currentTime.ToString());
         if (!won && !lost)
         {
-            float progress = (float)(dodgedObjects - hitObjects) / maxObjectsToDodge;
+            var progress = (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2))) / amountOfObjectsToHit;
             progressBar.fillAmount = progress;
         }
+    }
+
+    private bool CheckIfHasWon()
+    {
+        if (RedFishesHit >= AmountOfRedFishesToHit &&
+            PinkFishesHit >= AmountOfPinkFishesToHit &&
+            GreenFishesHit >= AmountOfGreenFishesToHit &&
+            YellowFishesHit >= AmountOfYellowFishesToHit)
+            return true;
+
+        return false;
     }
 }

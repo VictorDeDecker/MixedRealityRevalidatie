@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 3328346349387486397}
   m_Layer: 0
   m_Name: FishV2Light
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -594,6 +594,7 @@ MonoBehaviour:
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: 1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!95 &1448755650194781838
 Animator:
   serializedVersion: 4
@@ -679,3 +680,4 @@ MonoBehaviour:
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}

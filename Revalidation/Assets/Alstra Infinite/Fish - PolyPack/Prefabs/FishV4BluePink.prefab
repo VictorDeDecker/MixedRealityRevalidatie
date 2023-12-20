@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 1284134305528358883}
   m_Layer: 0
   m_Name: FishV4BluePink
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,12 +120,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 2
   Rotation: 90
+  IsTargetFish: 1
+  Color: 
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!136 &3037749046122689430
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -208,7 +212,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2de3cd7a6f6984141b61a1fb6efe536f, type: 2}
+  - {fileID: 2100000, guid: b363103bb9b5c354299795e49d6d7b03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

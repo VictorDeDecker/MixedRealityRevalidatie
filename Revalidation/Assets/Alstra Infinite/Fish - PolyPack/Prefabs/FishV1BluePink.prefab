@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 2528265461345729661}
   m_Layer: 0
   m_Name: FishV1BluePink
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -587,12 +587,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 2
   Rotation: 90
+  IsTargetFish: 0
+  Color: 
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!95 &7976751554579448254
 Animator:
   serializedVersion: 4

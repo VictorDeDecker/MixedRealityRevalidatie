@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 5833018554113607172}
   m_Layer: 0
   m_Name: FishV3
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -439,12 +439,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 2
   Rotation: 90
+  IsTargetFish: 1
+  Color: 
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!54 &6258850897548676506
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1125,7 +1129,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4874126678125670354, guid: ae51ad94fa7d3764d957aa512d506d00, type: 3}
+  - {fileID: 2100000, guid: e0de22327ccdd9a4f95e2fb74f49b11b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

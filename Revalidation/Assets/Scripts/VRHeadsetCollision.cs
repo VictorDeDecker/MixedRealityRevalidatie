@@ -10,15 +10,12 @@ public class VRHeadsetCollision : MonoBehaviour
             progressBar = FindObjectOfType<UpdateProgressBar>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        progressBar.HitObject();
-        Destroy(other.gameObject);
+        if (!other.CompareTag("Volumes"))
+        {
+            progressBar.HitObjectWithHead();
+            Destroy(other.gameObject);
+        }
     }
 }

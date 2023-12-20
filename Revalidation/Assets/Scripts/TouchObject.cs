@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class TouchObject : MonoBehaviour
 {
-    public string TargetTag = "Target";
+    public string TargetTag = "FishNet";
+    public string DestroyPlaneTag = "Target";
     public float Speed = 1f;
-    private bool _touched = false;
     public float Rotation = 0f;
+    public bool IsTargetFish = false;
+    public string Color = "";
     public Vector3 RockDirection = new Vector3(0f, 0f, 1f);
     public Vector3 ShipDirection = new Vector3(0f, 0f, 1f);
     public Vector3 BalloonDirection = new Vector3(0f, 0f, -1f);
@@ -38,11 +40,6 @@ public class TouchObject : MonoBehaviour
 
     void Update()
     {
-        if (_touched)
-        {
-            Destroy(gameObject);
-        }
-
         if (transform.CompareTag("RockTarget"))
         {
             transform.Translate(Speed * Time.deltaTime * RockDirection, Space.World);
@@ -71,10 +68,10 @@ public class TouchObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(TargetTag))
+        if (other.gameObject.CompareTag(DestroyPlaneTag))
         {
-            ProgressBar.DodgeObject();
-            _touched = true;
+            ProgressBar.MissedObject(IsTargetFish);
+            Destroy(gameObject);
         }
     }
 }
