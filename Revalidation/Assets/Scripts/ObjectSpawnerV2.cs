@@ -5,6 +5,8 @@ using UnityEngine;
 public class ObjectSpawnerV2 : MonoBehaviour
 {
     public List<TouchObject> Objects;
+    public MaterialStorage Storage;
+    public UpdateProgressBar ProgressBar;
     public int LevelLengthInSec = 180;
     public int TimeBetweenSpawnsInSec = 2;
     public bool InfiniteSpawn = false;
@@ -13,6 +15,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public float SpaceBetween;
     public bool IncludeDucking = false;
     public bool IncludeMovement = false;
+    public bool IncludeObstacles = true;
     public bool IsSpawning = true;
 
     //The colors that you want to spawn
@@ -21,11 +24,20 @@ public class ObjectSpawnerV2 : MonoBehaviour
     //Amount of objects to hit per color
     public Dictionary<string, int> AmountPerColor = new Dictionary<string, int>();
 
-    private MaterialStorage Storage;
-
     void Start()
     {
-        Storage = FindObjectOfType(typeof(MaterialStorage)) as MaterialStorage;
+        if (ProgressBar == null)
+            ProgressBar = FindObjectOfType<UpdateProgressBar>();
+
+        if (!IncludeObstacles)
+        {
+            for (int i = 0; i < Objects.Count; i++)
+            {
+                if (!Objects[i].CompareTag("Fish"))
+                    Objects.Remove(Objects[i]);
+            }
+
+        }
         StartCoroutine(StartSpawning());
     }
 
@@ -62,18 +74,19 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private TouchObject UpdateMaterial(TouchObject touchObject)
     {
-        if (Random.Range(0, 3) == 0)
+        ProgressBar.CheckColorAmount();
+        if (Random.Range(0, 3) == 0 && ColorsToSpawn.Count > 0)
         {
             touchObject.IsTargetFish = true;
             var spawnObjectRenderer = touchObject.GetComponentInChildren<SkinnedMeshRenderer>();
             var material = GetAllowedColorMaterial();
             spawnObjectRenderer.material = material;
+            touchObject.Color = material.name.ToLower();
         }
         else
         {
             touchObject.IsTargetFish = false;
             var spawnObjectRenderer = touchObject.GetComponentInChildren<SkinnedMeshRenderer>();
-
             if (Random.Range(0, 2) == 0)
                 spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
             else
@@ -84,6 +97,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private Material GetAllowedColorMaterial()
     {
+        CheckColorsToSpawn();
         var material = Storage.GetHighlightedMaterials()[Random.Range(0, 4)];
         bool allowColor = false;
         for (int i = 0; i < ColorsToSpawn.Count; i++)
@@ -99,6 +113,55 @@ public class ObjectSpawnerV2 : MonoBehaviour
         else
         {
             return GetAllowedColorMaterial();
+        }
+    }
+
+    private void CheckColorsToSpawn()
+    {
+        if (ColorsToSpawn.Count < 0) return;
+
+        if (ProgressBar.AllRedFishesCaught)
+        {
+            if (ColorsToSpawn.Contains("Red"))
+                ColorsToSpawn.Remove("Red");
+        }
+        else
+        {
+            if (!ColorsToSpawn.Contains("Red"))
+                ColorsToSpawn.Add("Red");
+        }
+
+        if (ProgressBar.AllPinkFishesCaught)
+        {
+            if (ColorsToSpawn.Contains("Pink"))
+                ColorsToSpawn.Remove("Pink");
+        }
+        else
+        {
+            if (!ColorsToSpawn.Contains("Pink"))
+                ColorsToSpawn.Add("Pink");
+        }
+
+        if (ProgressBar.AllGreenFishesCaught)
+        {
+            if (ColorsToSpawn.Contains("Green"))
+                ColorsToSpawn.Remove("Green");
+        }
+        else
+        {
+            if (!ColorsToSpawn.Contains("Green"))
+                ColorsToSpawn.Add("Green");
+        }
+
+        if (ProgressBar.AllYellowFishescaught)
+        {
+            if (ColorsToSpawn.Contains("Yellow"))
+                ColorsToSpawn.Remove("Yellow");
+        }
+        else
+        {
+            if (!ColorsToSpawn.Contains("Yellow"))
+                ColorsToSpawn.Add("Yellow");
         }
     }
 }

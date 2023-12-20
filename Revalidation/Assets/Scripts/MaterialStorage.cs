@@ -6,7 +6,7 @@ public class MaterialStorage : MonoBehaviour
     public List<Material> Materials = new List<Material>();
     public Dictionary<string, Material> MaterialDictionary = new();
 
-    private void Start()
+    void Awake()
     {
         if (Materials.Count > 0)
         {

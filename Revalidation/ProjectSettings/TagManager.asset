@@ -16,6 +16,7 @@ TagManager:
   - Volumes
   - FishNet
   - Shark
+  - MaterialStorage
   layers:
   - Default
   - TransparentFX

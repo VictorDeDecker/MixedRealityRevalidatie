@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class TouchObject : MonoBehaviour
 {
-    public string TargetTag = "FishNet";
     public string DestroyPlaneTag = "Target";
     public float Speed = 1f;
     public float Rotation = 0f;
@@ -70,7 +69,7 @@ public class TouchObject : MonoBehaviour
     {
         if (other.gameObject.CompareTag(DestroyPlaneTag))
         {
-            ProgressBar.MissedObject(IsTargetFish);
+            ProgressBar.MissedObject(IsTargetFish, Color);
             Destroy(gameObject);
         }
     }
