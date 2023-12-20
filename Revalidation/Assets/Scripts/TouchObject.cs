@@ -6,6 +6,8 @@ public class TouchObject : MonoBehaviour
     public string DestroyPlaneTag = "Target";
     public float Speed = 1f;
     public float Rotation = 0f;
+    public bool IsTargetFish = false;
+    public string Color = "";
     public Vector3 RockDirection = new Vector3(0f, 0f, 1f);
     public Vector3 ShipDirection = new Vector3(0f, 0f, 1f);
     public Vector3 BalloonDirection = new Vector3(0f, 0f, -1f);
@@ -68,7 +70,7 @@ public class TouchObject : MonoBehaviour
     {
         if (other.gameObject.CompareTag(DestroyPlaneTag))
         {
-            ProgressBar.DodgeObject();
+            ProgressBar.MissedObject(IsTargetFish);
             Destroy(gameObject);
         }
     }

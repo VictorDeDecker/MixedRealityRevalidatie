@@ -330,12 +330,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 2
   Rotation: 0
+  IsTargetFish: 0
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
+  ProgressBar: {fileID: 0}
 --- !u!54 &2866268047577886356
 Rigidbody:
   m_ObjectHideFlags: 0
