@@ -12,7 +12,7 @@ public class VRHeadsetCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Fish"))
+        if (!other.CompareTag("Volumes"))
         {
             progressBar.HitObjectWithHead();
             Destroy(other.gameObject);
