@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,10 @@ public class UpdateProgressBar : MonoBehaviour
     public Image progressBar;
     public Canvas WinScreen;
     public Canvas LoseScreen;
+    public TextMeshProUGUI RedFishScore;
+    public TextMeshProUGUI PinkFishScore;
+    public TextMeshProUGUI GreenFishScore;
+    public TextMeshProUGUI YellowFishScore;
     public ObjectSpawnerV2 ObjectSpawnerV2;
 
     public float TimeToComplete = 60f;
@@ -23,6 +28,17 @@ public class UpdateProgressBar : MonoBehaviour
     private float GreenFishesHit = 0f;
     private float YellowFishesHit = 0f;
 
+    //The amount of fishes missed
+    private float RedFishesMissed = 0f;
+    private float PinkFishesMissed = 0f;
+    private float GreenFishesMissed = 0f;
+    private float YellowFishesMissed = 0f;
+
+    public bool AllRedFishesCaught = false;
+    public bool AllPinkFishesCaught = false;
+    public bool AllGreenFishesCaught = false;
+    public bool AllYellowFishescaught = false;
+
     private float amountOfObjectsToHit = 10;
     private float missedObjects = 0;
     private float hitObjects = 0;
@@ -39,6 +55,7 @@ public class UpdateProgressBar : MonoBehaviour
         TimeToComplete = ObjectSpawnerV2.LevelLengthInSec;
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
+        SetFishScores();
         amountOfObjectsToHit = AmountOfRedFishesToHit + AmountOfPinkFishesToHit + AmountOfGreenFishesToHit + AmountOfYellowFishesToHit;
         UpdateProgress();
     }
@@ -50,43 +67,119 @@ public class UpdateProgressBar : MonoBehaviour
             CurrentTime += Time.deltaTime;
     }
 
-    public void MissedObject(bool IsTargetFish)
+    public void MissedObject(bool IsTargetFish, string color)
     {
         if (IsTargetFish)
         {
             missedObjects++;
+            switch (color.ToLower())
+            {
+                case "red":
+                    RedFishesMissed++;
+                    break;
+                case "pink":
+                    PinkFishesMissed++;
+                    break;
+                case "green":
+                    GreenFishesMissed++;
+                    break;
+                case "yellow":
+                    YellowFishesMissed++;
+                    break;
+            }
         }
 
-
+        SetFishScores();
+        CheckColorAmount();
         UpdateProgress();
     }
 
     public void HitNotTargetFish()
     {
         hitNotTargetFish++;
+        switch (Random.Range(0, 4))
+        {
+            case 0:
+                RedFishesMissed++;
+                break;
+            case 1:
+                PinkFishesMissed++;
+                break;
+            case 2:
+                GreenFishesMissed++;
+                break;
+            case 3:
+                YellowFishesMissed++;
+                break;
+            default:
+                break;
+        }
+
+        SetFishScores();
+        CheckColorAmount();
         UpdateProgress();
     }
 
     public void HitObstacle()
     {
         hitObstacle++;
+        switch (Random.Range(0, 4))
+        {
+            case 0:
+                RedFishesMissed++;
+                break;
+            case 1:
+                PinkFishesMissed++;
+                break;
+            case 2:
+                GreenFishesMissed++;
+                break;
+            case 3:
+                YellowFishesMissed++;
+                break;
+            default:
+                break;
+        }
+
+        SetFishScores();
+        CheckColorAmount();
         UpdateProgress();
     }
 
     public void HitObjectWithHead()
     {
         hitObjectWithHead++;
+        switch (Random.Range(0, 4))
+        {
+            case 0:
+                RedFishesMissed++;
+                break;
+            case 1:
+                PinkFishesMissed++;
+                break;
+            case 2:
+                GreenFishesMissed++;
+                break;
+            case 3:
+                YellowFishesMissed++;
+                break;
+            default:
+                break;
+        }
+
+        SetFishScores();
+        CheckColorAmount();
         UpdateProgress();
     }
 
     public void HitObject(string hand, string color)
     {
         hitObjects++;
-        UpdateColorHit(color);
 
+        UpdateColorHit(color);
         UpdateHandHit(hand);
 
-        if (hitObjects > amountOfObjectsToHit && !lost && CheckIfHasWon())
+        if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2)) > amountOfObjectsToHit && !lost && CheckIfHasWon())
         {
             ObjectSpawnerV2.IsSpawning = false;
             won = true;
@@ -119,19 +212,22 @@ public class UpdateProgressBar : MonoBehaviour
     {
         switch (color.ToLower())
         {
-            case "Red":
+            case "red":
                 RedFishesHit++;
                 break;
-            case "Pink":
+            case "pink":
                 PinkFishesHit++;
                 break;
-            case "Green":
+            case "green":
                 GreenFishesHit++;
                 break;
-            case "Yellow":
+            case "yellow":
                 YellowFishesHit++;
                 break;
         }
+
+        SetFishScores();
+        CheckColorAmount();
     }
 
     private void UpdateHandHit(string hand)
@@ -153,12 +249,102 @@ public class UpdateProgressBar : MonoBehaviour
 
     private bool CheckIfHasWon()
     {
-        if (RedFishesHit >= AmountOfRedFishesToHit &&
-            PinkFishesHit >= AmountOfPinkFishesToHit &&
-            GreenFishesHit >= AmountOfGreenFishesToHit &&
-            YellowFishesHit >= AmountOfYellowFishesToHit)
+        if (AllRedFishesCaught &&
+            AllPinkFishesCaught &&
+            AllGreenFishesCaught &&
+            AllYellowFishescaught)
             return true;
 
         return false;
+    }
+
+    private void SetFishScores()
+    {
+        if (AmountOfRedFishesToHit == 0)
+            RedFishScore.text = "";
+        else
+            RedFishScore.text = $"{RedFishesHit}/{AmountOfRedFishesToHit} Red Fish ({RedFishesMissed} missed)";
+
+        if (AmountOfPinkFishesToHit == 0)
+            PinkFishScore.text = "";
+        else
+            PinkFishScore.text = $"{PinkFishesHit}/{AmountOfPinkFishesToHit} Pink Fish ({PinkFishesMissed} missed)";
+
+        if (AmountOfGreenFishesToHit == 0)
+            GreenFishScore.text = "";
+        else
+            GreenFishScore.text = $"{GreenFishesHit}/{AmountOfGreenFishesToHit} Green Fish ({GreenFishesMissed} missed)";
+
+        if (AmountOfYellowFishesToHit == 0)
+            YellowFishScore.text = "";
+        else
+            YellowFishScore.text = $"{YellowFishesHit}/{AmountOfYellowFishesToHit} Yellow Fish ({YellowFishesMissed} missed)";
+    }
+
+    public void CheckColorAmount()
+    {
+        if (RedFishesHit - RedFishesMissed >= AmountOfRedFishesToHit)
+        {
+            AllRedFishesCaught = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                if (touchObjects[i].Color.ToLower() == "red")
+                    Destroy(touchObjects[i].gameObject);
+            }
+        }
+        else
+        {
+            AllRedFishesCaught = false;
+        }
+
+        if (PinkFishesHit - PinkFishesMissed >= AmountOfPinkFishesToHit)
+        {
+            AllPinkFishesCaught = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                if (touchObjects[i].Color.ToLower() == "pink")
+                    Destroy(touchObjects[i].gameObject);
+            }
+        }
+        else
+        {
+            AllPinkFishesCaught = false;
+        }
+
+        if (GreenFishesHit - GreenFishesMissed >= AmountOfGreenFishesToHit)
+        {
+            AllGreenFishesCaught = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                if (touchObjects[i].Color.ToLower() == "green")
+                    Destroy(touchObjects[i].gameObject);
+            }
+        }
+        else
+        {
+            AllGreenFishesCaught = false;
+        }
+
+        if (YellowFishesHit - YellowFishesMissed >= AmountOfYellowFishesToHit)
+        {
+            AllYellowFishescaught = true;
+            var touchObjects = FindObjectsOfType<TouchObject>();
+
+            for (int i = 0; i < touchObjects.Length; i++)
+            {
+                if (touchObjects[i].Color.ToLower() == "yellow")
+                    Destroy(touchObjects[i].gameObject);
+            }
+        }
+        else
+        {
+            AllYellowFishescaught = false;
+        }
     }
 }
