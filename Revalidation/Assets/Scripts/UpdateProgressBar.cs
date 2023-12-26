@@ -16,13 +16,13 @@ public class UpdateProgressBar : MonoBehaviour
     public float TimeToComplete = 60f;
     public float CurrentTime = 0f;
 
-    //The amount of fishes a patiënt has to hit
+    //The amount of fishes a patiï¿½nt has to hit
     public float AmountOfRedFishesToHit = 0f;
     public float AmountOfPinkFishesToHit = 0f;
     public float AmountOfGreenFishesToHit = 0f;
     public float AmountOfYellowFishesToHit = 0f;
 
-    //The actual amount the patiënt has hit
+    //The actual amount the patiï¿½nt has hit
     private float RedFishesHit = 0f;
     private float PinkFishesHit = 0f;
     private float GreenFishesHit = 0f;

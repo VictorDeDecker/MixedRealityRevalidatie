@@ -589,7 +589,7 @@ MonoBehaviour:
   DestroyPlaneTag: Target
   Speed: 2
   Rotation: 90
-  IsTargetFish: 1
+  IsTargetFish: 0
   Color: red
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
