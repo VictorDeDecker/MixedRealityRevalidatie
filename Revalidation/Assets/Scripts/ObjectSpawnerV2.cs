@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Mono.Cecil;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectSpawnerV2 : MonoBehaviour
@@ -8,7 +8,6 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public List<TouchObject> Objects;
     public MaterialStorage Storage;
     public UpdateProgressBar ProgressBar;
-    //public Task
     public int LevelLengthInSec = 180;
     public int TimeBetweenSpawnsInSec = 2;
     public bool InfiniteSpawn = false;
@@ -30,13 +29,9 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
         if (!IncludeObstacles)
         {
-            for (int i = 0; i < Objects.Count; i++)
-            {
-                if (!Objects[i].CompareTag("Fish"))
-                    Objects.Remove(Objects[i]);
-            }
-
+            Objects = Objects.Where(obj => obj.CompareTag("Fish")).ToList();
         }
+
         StartCoroutine(StartSpawning());
     }
 
@@ -71,7 +66,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
             point = new Vector3(Random.Range(-SpawnRadius + 1.5f, SpawnRadius + 1.5f), Random.Range(Height - SpawnRadius, Height + SpawnRadius));
         if (IncludeDucking)
             point = new Vector3(Random.Range(-SpawnRadius, SpawnRadius), Random.Range(0, Height + SpawnRadius));
-        if(IncludeMovement && IncludeDucking)
+        if (IncludeMovement && IncludeDucking)
             point = new Vector3(Random.Range(-SpawnRadius + 1.5f, SpawnRadius + 1.5f), Random.Range(0, Height + SpawnRadius));
 
         return point + this.gameObject.transform.position;

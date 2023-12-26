@@ -212,6 +212,9 @@ public class UnityServer : MonoBehaviour
                         case "movement":
                             objectSpawner.IncludeMovement = request.parameterValue != 0;
                             break;
+                        case "obstacles":
+                            objectSpawner.IncludeObstacles = request.parameterValue != 0;
+                            break;
                         case "waitbetweenspawns":
                             objectSpawner.TimeBetweenSpawnsInSec = (int)request.parameterValue;
                             break;

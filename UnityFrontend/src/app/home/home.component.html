@@ -136,11 +136,30 @@
     </div>
     <div class="box mt-5">
       <label class="label"
-        ><input type="checkbox" /> Include ducking in the level</label
+        ><input
+          type="checkbox"
+          [(ngModel)]="ducking"
+          (click)="checkDucking()"
+        />
+        Include ducking in the level</label
       >
 
       <label class="label"
-        ><input type="checkbox" /> Include movement in the level</label
+        ><input
+          type="checkbox"
+          [(ngModel)]="movement"
+          (click)="checkMovement()"
+        />
+        Include movement in the level</label
+      >
+
+      <label class="label"
+        ><input
+          type="checkbox"
+          [(ngModel)]="obstacles"
+          (click)="checkObstacles()"
+        />
+        Include obstacles in the level</label
       >
     </div>
   </div>

@@ -13,8 +13,11 @@ export class HomeComponent {
   height:number = 2;
   timeInSeconds:number = 30;
   SpawnRadius:number = 2;
-  spaceBetweenCircles:number = 2;
+  spaceBetweenCircles:number = 4;
   InfiniteSpawnWaitTime:number = 2;
+  movement:boolean = false;
+  ducking:boolean = false;
+  obstacles:boolean = false;
   response?:string;
   changeParameterResponse?:string;
   allowRedFish:boolean = true;
@@ -100,6 +103,66 @@ export class HomeComponent {
     };
 
     (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+  }
+
+  async checkDucking(){
+    if(this.ducking){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "ducking",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    } else{
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "ducking",
+        value: 1
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
+  }
+
+  async checkMovement(){
+    if(this.movement){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "movement",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    } else{
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "movement",
+        value: 1
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
+  }
+
+  async checkObstacles(){
+    if(this.obstacles){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "obstacles",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    } else{
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "obstacles",
+        value: 1
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
   }
 
   async changeLevel(level:string){
