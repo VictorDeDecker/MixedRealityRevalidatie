@@ -6,6 +6,7 @@ using UnityEngine;
 public class ObjectSpawnerV2 : MonoBehaviour
 {
     public List<TouchObject> Objects;
+    private List<TouchObject> objectsToUse;
     public MaterialStorage Storage;
     public UpdateProgressBar ProgressBar;
     public int LevelLengthInSec = 180;
@@ -16,7 +17,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public float SpaceBetween;
     public bool IncludeDucking = false;
     public bool IncludeMovement = false;
-    public bool IncludeObstacles = true;
+    public bool IncludeObstacles = false;
     public bool IsSpawning = true;
 
     //The colors that you want to spawn
@@ -27,10 +28,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
         if (ProgressBar == null)
             ProgressBar = FindObjectOfType<UpdateProgressBar>();
 
-        if (!IncludeObstacles)
-        {
-            Objects = Objects.Where(obj => obj.CompareTag("Fish")).ToList();
-        }
+        objectsToUse = Objects;
 
         StartCoroutine(StartSpawning());
     }
@@ -40,6 +38,14 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
         while ((LevelLengthInSec > 0 || InfiniteSpawn) && IsSpawning)
         {
+            if (!IncludeObstacles)
+            {
+                objectsToUse = Objects.Where(obj => obj.CompareTag("Fish")).ToList();
+            }
+            else
+            {
+                objectsToUse = Objects;
+            }
             LevelLengthInSec--;
             SpawnObject();
             yield return new WaitForSeconds(TimeBetweenSpawnsInSec);
@@ -48,7 +54,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private void SpawnObject()
     {
-        var spawnObject = Objects[Mathf.FloorToInt(Objects.Count * Random.value)];
+        var spawnObject = objectsToUse[Mathf.FloorToInt(objectsToUse.Count * Random.value)];
 
         if (spawnObject.gameObject.CompareTag("Fish"))
             UpdateMaterial(spawnObject);

@@ -73,11 +73,11 @@ public class UpdateProgressBar : MonoBehaviour
         AmountOfPinkFishesToHit = UnityServer.PinkFish;
         AmountOfGreenFishesToHit = UnityServer.GreenFish;
         AmountOfYellowFishesToHit = UnityServer.YellowFish;
+        TimeToComplete = UnityServer.objectSpawner.LevelLengthInSec;
     }
 
     void Start()
     {
-        //TimeToComplete = UnityServer.objectSpawner.LevelLengthInSec;
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
         SetFishScores();
@@ -87,9 +87,9 @@ public class UpdateProgressBar : MonoBehaviour
 
     private void Update()
     {
-        //TimeToComplete = UnityServer.objectSpawner.LevelLengthInSec;
         if (!won)
             CurrentTime += Time.deltaTime;
+        CheckIfLost();
     }
 
     public void MissedObject(bool IsTargetFish, string color)
@@ -159,7 +159,7 @@ public class UpdateProgressBar : MonoBehaviour
 
         if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2)) > amountOfObjectsToHit && !lost && CheckIfHasWon())
         {
-            //UnityServer.objectSpawner.IsSpawning = false;
+            UnityServer.objectSpawner.IsSpawning = false;
             won = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
@@ -170,10 +170,14 @@ public class UpdateProgressBar : MonoBehaviour
 
             WinScreen.gameObject.SetActive(true);
         }
+        UpdateProgress();
+    }
 
+    private void CheckIfLost()
+    {
         if (CurrentTime > TimeToComplete)
         {
-            //UnityServer.objectSpawner.IsSpawning = false;
+            UnityServer.objectSpawner.IsSpawning = false;
             lost = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
