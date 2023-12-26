@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Cecil;
 using UnityEngine;
 
 public class ObjectSpawnerV2 : MonoBehaviour
@@ -64,10 +65,16 @@ public class ObjectSpawnerV2 : MonoBehaviour
     private Vector3 RandomSpawnPoint()
     {
         Vector3 point = Random.value > 0.5 ?
-            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(SpaceBetween / 2, 0, 0) :
-            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(-SpaceBetween / 2, 0, 0);
+            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(SpaceBetween / 2, Height, 0) :
+            (Vector3)Random.insideUnitCircle.normalized * Random.Range(0, SpawnRadius) + new Vector3(-SpaceBetween / 2, Height, 0);
+        if (IncludeMovement)
+            point = new Vector3(Random.Range(-SpawnRadius + 1.5f, SpawnRadius + 1.5f), Random.Range(Height - SpawnRadius, Height + SpawnRadius));
+        if (IncludeDucking)
+            point = new Vector3(Random.Range(-SpawnRadius, SpawnRadius), Random.Range(0, Height + SpawnRadius));
+        if(IncludeMovement && IncludeDucking)
+            point = new Vector3(Random.Range(-SpawnRadius + 1.5f, SpawnRadius + 1.5f), Random.Range(0, Height + SpawnRadius));
 
-        return point + this.gameObject.transform.position + new Vector3(0, Height, 0);
+        return point + this.gameObject.transform.position;
     }
 
     private TouchObject UpdateMaterial(TouchObject touchObject)
