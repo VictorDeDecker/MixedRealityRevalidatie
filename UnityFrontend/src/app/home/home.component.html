@@ -74,7 +74,7 @@
         min="1"
         max="10"
         value="3"
-        step="0,05"
+        step="0.05"
         class="slider"
         id="myRange"
         [(ngModel)]="spaceBetweenCircles"
@@ -135,11 +135,32 @@
       </button>
     </div>
     <div class="box mt-5">
-      <label class="label">Include ducking in the level</label>
-      <input type="checkbox" />
+      <label class="label"
+        ><input
+          type="checkbox"
+          [(ngModel)]="ducking"
+          (click)="checkDucking()"
+        />
+        Include ducking in the level</label
+      >
 
-      <label class="label">Include movement in the level</label>
-      <input type="checkbox" />
+      <label class="label"
+        ><input
+          type="checkbox"
+          [(ngModel)]="movement"
+          (click)="checkMovement()"
+        />
+        Include movement in the level</label
+      >
+
+      <label class="label"
+        ><input
+          type="checkbox"
+          [(ngModel)]="obstacles"
+          (click)="checkObstacles()"
+        />
+        Include obstacles in the level</label
+      >
     </div>
   </div>
 
@@ -162,6 +183,7 @@
         Quit
       </button>
     </div>
+
     <div class="box mt-5">
       <h2>Difficulty presets</h2>
       <button class="button is-primary mr-4" (click)="veryEasy()">
@@ -173,6 +195,142 @@
       <button class="button is-primary mr-4" (click)="veryHard()">
         Very Hard
       </button>
+    </div>
+
+    <div class="box mt-5">
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            class="checkbox"
+            [(ngModel)]="allowRedFish"
+            (click)="checkRedFish()"
+          />
+          Should red fish appear?
+        </label>
+      </div>
+      <div *ngIf="allowRedFish">
+        <label class="label"> How many should the patient catch?</label>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value="1"
+          class="slider"
+          id="myRange"
+          [(ngModel)]="redFish"
+        />
+
+        <div class="control pl-3">
+          <input class="input" type="number" [(ngModel)]="redFish" />
+        </div>
+
+        <button class="button is-primary" (click)="applyRedFish()">
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <div class="box mt-5">
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            class="checkbox"
+            [(ngModel)]="allowPinkFish"
+            (click)="checkPinkFish()"
+          />
+          Should pink fish appear?
+        </label>
+      </div>
+      <div *ngIf="allowPinkFish">
+        <label class="label"> How many should the patient catch?</label>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value="1"
+          class="slider"
+          id="myRange"
+          [(ngModel)]="pinkFish"
+        />
+
+        <div class="control pl-3">
+          <input class="input" type="number" [(ngModel)]="pinkFish" />
+        </div>
+
+        <button class="button is-primary" (click)="applyPinkFish()">
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <div class="box mt-5">
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            class="checkbox"
+            [(ngModel)]="allowGreenFish"
+            (click)="checkGreenFish()"
+          />
+          Should green fish appear?
+        </label>
+      </div>
+      <div *ngIf="allowGreenFish">
+        <label class="label"> How many should the patient catch?</label>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value="1"
+          class="slider"
+          id="myRange"
+          [(ngModel)]="greenFish"
+        />
+
+        <div class="control pl-3">
+          <input class="input" type="number" [(ngModel)]="greenFish" />
+        </div>
+
+        <button class="button is-primary" (click)="applyGreenFish()">
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <div class="box mt-5">
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            class="checkbox"
+            [(ngModel)]="allowYellowFish"
+            (click)="checkYellowFish()"
+          />
+          Should yellow fish appear?
+        </label>
+      </div>
+      <div *ngIf="allowYellowFish">
+        <label class="label"> How many should the patient catch?</label>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value="1"
+          class="slider"
+          id="myRange"
+          [(ngModel)]="yellowFish"
+        />
+
+        <div class="control pl-3">
+          <input class="input" type="number" [(ngModel)]="yellowFish" />
+        </div>
+
+        <button class="button is-primary" (click)="applyYellowFish()">
+          Apply
+        </button>
+      </div>
     </div>
   </div>
 </div>
