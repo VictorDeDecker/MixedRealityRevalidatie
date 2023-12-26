@@ -17,6 +17,14 @@ export class HomeComponent {
   InfiniteSpawnWaitTime:number = 2;
   response?:string;
   changeParameterResponse?:string;
+  allowRedFish:boolean = true;
+  redFish:number = 0;
+  allowPinkFish:boolean = true;
+  pinkFish:number = 0;
+  allowGreenFish: boolean = true;
+  greenFish:number = 0;
+  allowYellowFish:boolean = true;
+  yellowFish:number = 0;
 
   constructor(private unityService:UnityService){
     setInterval(()=>{
@@ -162,5 +170,93 @@ export class HomeComponent {
     this.applyAmountOfSeconds();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+  }
+
+  async applyRedFish(){
+    let parameterChangeRequest:ParameterChangeRequest = {
+      script: "objectSpawner",
+      parameter: "redFishAmount",
+      value: this.redFish
+    };
+
+    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+  }
+
+  async applyPinkFish(){
+    let parameterChangeRequest:ParameterChangeRequest = {
+      script: "objectSpawner",
+      parameter: "pinkFishAmount",
+      value: this.pinkFish
+    };
+
+    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+  }
+
+  async applyGreenFish(){
+    let parameterChangeRequest:ParameterChangeRequest = {
+      script: "objectSpawner",
+      parameter: "greenFishAmount",
+      value: this.greenFish
+    };
+
+    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+  }
+
+  async applyYellowFish(){
+    let parameterChangeRequest:ParameterChangeRequest = {
+      script: "objectSpawner",
+      parameter: "yellowFishAmount",
+      value: this.yellowFish
+    };
+
+    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+  }
+
+  async checkRedFish(){
+    if(this.allowRedFish){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "allowRedFish",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
+  }
+
+  async checkPinkFish(){
+    if(this.allowPinkFish){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "allowPinkFish",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
+  }
+
+  async checkGreenFish(){
+    if(this.allowGreenFish){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "allowGreenFish",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
+  }
+
+  async checkYellowFish(){
+    if(this.allowYellowFish){
+      let parameterChangeRequest:ParameterChangeRequest = {
+        script: "objectSpawner",
+        parameter: "allowYellowFish",
+        value: 0
+      };
+  
+      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    }
   }
 }

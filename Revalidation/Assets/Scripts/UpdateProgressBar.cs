@@ -11,7 +11,7 @@ public class UpdateProgressBar : MonoBehaviour
     public TextMeshProUGUI PinkFishScore;
     public TextMeshProUGUI GreenFishScore;
     public TextMeshProUGUI YellowFishScore;
-    public ObjectSpawnerV2 ObjectSpawnerV2;
+    public UnityServer UnityServer;
 
     public float TimeToComplete = 60f;
     public float CurrentTime = 0f;
@@ -34,6 +34,7 @@ public class UpdateProgressBar : MonoBehaviour
     private float GreenFishesMissed = 0f;
     private float YellowFishesMissed = 0f;
 
+    //All fishes caught per color
     public bool AllRedFishesCaught = false;
     public bool AllPinkFishesCaught = false;
     public bool AllGreenFishesCaught = false;
@@ -50,9 +51,33 @@ public class UpdateProgressBar : MonoBehaviour
     private float hitWithRightHand = 0;
     private float hitWithLeftHand = 0;
 
+    void Awake()
+    {
+        if (UnityServer == null)
+        {
+            UnityServer = FindObjectOfType<UnityServer>();
+        }
+        AmountOfRedFishesToHit = UnityServer.RedFish;
+        AmountOfPinkFishesToHit = UnityServer.PinkFish;
+        AmountOfGreenFishesToHit = UnityServer.GreenFish;
+        AmountOfYellowFishesToHit = UnityServer.YellowFish;
+    }
+
+    public void UpdateAmountOfFish()
+    {
+        if (UnityServer == null)
+        {
+            UnityServer = FindObjectOfType<UnityServer>();
+        }
+        AmountOfRedFishesToHit = UnityServer.RedFish;
+        AmountOfPinkFishesToHit = UnityServer.PinkFish;
+        AmountOfGreenFishesToHit = UnityServer.GreenFish;
+        AmountOfYellowFishesToHit = UnityServer.YellowFish;
+    }
+
     void Start()
     {
-        TimeToComplete = ObjectSpawnerV2.LevelLengthInSec;
+        //TimeToComplete = UnityServer.objectSpawner.LevelLengthInSec;
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
         SetFishScores();
@@ -62,7 +87,7 @@ public class UpdateProgressBar : MonoBehaviour
 
     private void Update()
     {
-        TimeToComplete = ObjectSpawnerV2.LevelLengthInSec;
+        //TimeToComplete = UnityServer.objectSpawner.LevelLengthInSec;
         if (!won)
             CurrentTime += Time.deltaTime;
     }
@@ -97,23 +122,8 @@ public class UpdateProgressBar : MonoBehaviour
     public void HitNotTargetFish()
     {
         hitNotTargetFish++;
-        switch (Random.Range(0, 4))
-        {
-            case 0:
-                RedFishesMissed++;
-                break;
-            case 1:
-                PinkFishesMissed++;
-                break;
-            case 2:
-                GreenFishesMissed++;
-                break;
-            case 3:
-                YellowFishesMissed++;
-                break;
-            default:
-                break;
-        }
+
+        AddRandomMissedFish();
 
         SetFishScores();
         CheckColorAmount();
@@ -123,23 +133,7 @@ public class UpdateProgressBar : MonoBehaviour
     public void HitObstacle()
     {
         hitObstacle++;
-        switch (Random.Range(0, 4))
-        {
-            case 0:
-                RedFishesMissed++;
-                break;
-            case 1:
-                PinkFishesMissed++;
-                break;
-            case 2:
-                GreenFishesMissed++;
-                break;
-            case 3:
-                YellowFishesMissed++;
-                break;
-            default:
-                break;
-        }
+        AddRandomMissedFish();
 
         SetFishScores();
         CheckColorAmount();
@@ -149,23 +143,7 @@ public class UpdateProgressBar : MonoBehaviour
     public void HitObjectWithHead()
     {
         hitObjectWithHead++;
-        switch (Random.Range(0, 4))
-        {
-            case 0:
-                RedFishesMissed++;
-                break;
-            case 1:
-                PinkFishesMissed++;
-                break;
-            case 2:
-                GreenFishesMissed++;
-                break;
-            case 3:
-                YellowFishesMissed++;
-                break;
-            default:
-                break;
-        }
+        AddRandomMissedFish();
 
         SetFishScores();
         CheckColorAmount();
@@ -181,7 +159,7 @@ public class UpdateProgressBar : MonoBehaviour
 
         if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2)) > amountOfObjectsToHit && !lost && CheckIfHasWon())
         {
-            ObjectSpawnerV2.IsSpawning = false;
+            //UnityServer.objectSpawner.IsSpawning = false;
             won = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
@@ -195,7 +173,7 @@ public class UpdateProgressBar : MonoBehaviour
 
         if (CurrentTime > TimeToComplete)
         {
-            ObjectSpawnerV2.IsSpawning = false;
+            //UnityServer.objectSpawner.IsSpawning = false;
             lost = true;
             var touchObjects = FindObjectsOfType<TouchObject>();
 
@@ -345,6 +323,46 @@ public class UpdateProgressBar : MonoBehaviour
         else
         {
             AllYellowFishescaught = false;
+        }
+    }
+
+    private void AddRandomMissedFish()
+    {
+        bool foundPossibleFish = false;
+        while (foundPossibleFish)
+        {
+            switch (Random.Range(0, 4))
+            {
+                case 0:
+                    if (AmountOfRedFishesToHit != 0)
+                    {
+                        foundPossibleFish = true;
+                        RedFishesMissed++;
+                    }
+
+                    break;
+                case 1:
+                    if (AmountOfPinkFishesToHit != 0)
+                    {
+                        foundPossibleFish = true;
+                        PinkFishesMissed++;
+                    }
+                    break;
+                case 2:
+                    if (AmountOfGreenFishesToHit != 0)
+                    {
+                        foundPossibleFish = true;
+                        GreenFishesMissed++;
+                    }
+                    break;
+                case 3:
+                    if (AmountOfYellowFishesToHit != 0)
+                    {
+                        foundPossibleFish = true;
+                        YellowFishesMissed++;
+                    }
+                    break;
+            }
         }
     }
 }

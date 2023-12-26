@@ -14,4 +14,9 @@ public class LevelManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public string GetActiveScene()
+    {
+        return SceneManager.GetActiveScene().name;
+    }
 }

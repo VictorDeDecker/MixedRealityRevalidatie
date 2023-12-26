@@ -15,11 +15,22 @@ public class UnityServer : MonoBehaviour
     private List<TouchObject> touchObject;
     private HttpListener listener;
     private bool isRunning;
-    private readonly LevelManager levelManager;
+    public LevelManager levelManager;
+    public int RedFish = 5;
+    public int PinkFish = 5;
+    public int GreenFish = 5;
+    public int YellowFish = 5;
 
     void Awake()
     {
-        gameObject.AddComponent<LevelManager>();
+        if (levelManager == null)
+            levelManager = FindObjectOfType<LevelManager>();
+
+        RedFish = 5;
+        PinkFish = 5;
+        GreenFish = 5;
+        YellowFish = 5;
+
         if (instance == null)
         {
             instance = this;
@@ -138,7 +149,7 @@ public class UnityServer : MonoBehaviour
                         string requestBody = reader.ReadToEnd();
 
                         SceneChange sceneChange = JsonConvert.DeserializeObject<SceneChange>(requestBody);
-                        Debug.Log($"Deserialized: {sceneChange.destinationScene}");
+                        //Debug.Log($"Deserialized: {sceneChange.destinationScene}");
 
                         ChangeScene(sceneChange);
 
@@ -180,38 +191,123 @@ public class UnityServer : MonoBehaviour
                     }
                     break;
                 case "objectSpawner":
-                    if (request.parameterToChange.ToLower() == "LevelLengthInSec".ToLower())
+                    switch (request.parameterToChange.ToLower())
                     {
-                        objectSpawner.LevelLengthInSec = (int)request.parameterValue;
+                        //Default parameters
+                        case "levellengthinsec":
+                            objectSpawner.LevelLengthInSec = (int)request.parameterValue;
+                            break;
+                        case "height":
+                            objectSpawner.Height = request.parameterValue;
+                            break;
+                        case "radius":
+                            objectSpawner.SpawnRadius = request.parameterValue;
+                            break;
+                        case "shoulderwidth":
+                            objectSpawner.SpaceBetween = request.parameterValue;
+                            break;
+                        case "ducking":
+                            objectSpawner.IncludeDucking = request.parameterValue != 0;
+                            break;
+                        case "movement":
+                            objectSpawner.IncludeMovement = request.parameterValue != 0;
+                            break;
+                        case "waitbetweenspawns":
+                            objectSpawner.TimeBetweenSpawnsInSec = (int)request.parameterValue;
+                            break;
+                        //Paremeters regarding fish
+                        case "redfishamount":
+                            RedFish = (int)request.parameterValue;
+                            objectSpawner.ProgressBar.UpdateAmountOfFish();
+                            if (!objectSpawner.ColorsToSpawn.Contains("Red"))
+                            {
+                                objectSpawner.ColorsToSpawn.Add("Red");
+                            }
+                            GetSceneNameAndReload();
+                            break;
+                        case "pinkfishamount":
+                            PinkFish = (int)request.parameterValue;
+                            objectSpawner.ProgressBar.UpdateAmountOfFish();
+                            if (!objectSpawner.ColorsToSpawn.Contains("Pink"))
+                            {
+                                objectSpawner.ColorsToSpawn.Add("Pink");
+                            }
+                            GetSceneNameAndReload();
+                            break;
+                        case "greenfishamount":
+                            GreenFish = (int)request.parameterValue;
+                            objectSpawner.ProgressBar.UpdateAmountOfFish();
+                            if (!objectSpawner.ColorsToSpawn.Contains("Green"))
+                            {
+                                objectSpawner.ColorsToSpawn.Add("Green");
+                            }
+                            GetSceneNameAndReload();
+                            break;
+                        case "yellowfishamount":
+                            YellowFish = (int)request.parameterValue;
+                            objectSpawner.ProgressBar.UpdateAmountOfFish();
+                            if (!objectSpawner.ColorsToSpawn.Contains("Yellow"))
+                            {
+                                objectSpawner.ColorsToSpawn.Add("Yellow");
+                            }
+                            GetSceneNameAndReload();
+                            break;
+                        case "allowredfish":
+                            GetSceneNameAndReload();
+                            if (objectSpawner.ColorsToSpawn.Contains("Red"))
+                            {
+                                objectSpawner.ColorsToSpawn.Remove("Red");
+                                RedFish = 0;
+                            }
+                            break;
+                        case "allowpinkfish":
+                            GetSceneNameAndReload();
+                            if (objectSpawner.ColorsToSpawn.Contains("Pink"))
+                            {
+                                objectSpawner.ColorsToSpawn.Remove("Pink");
+                                PinkFish = 0;
+                            }
+                            break;
+                        case "allowgreenfish":
+                            GetSceneNameAndReload();
+                            if (objectSpawner.ColorsToSpawn.Contains("Green"))
+                            {
+                                objectSpawner.ColorsToSpawn.Remove("Green");
+                                GreenFish = 0;
+                            }
+                            break;
+                        case "allowyellowfish":
+                            GetSceneNameAndReload();
+                            if (objectSpawner.ColorsToSpawn.Contains("Yellow"))
+                            {
+                                objectSpawner.ColorsToSpawn.Remove("Yellow");
+                                YellowFish = 0;
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                    else if (request.parameterToChange.ToLower() == "Height".ToLower())
-                    {
-                        objectSpawner.Height = request.parameterValue;
-                    }
-                    else if (request.parameterToChange.ToLower() == "Radius".ToLower())
-                    {
-                        objectSpawner.SpawnRadius = request.parameterValue;
-                    }
-                    else if (request.parameterToChange.ToLower() == "ShoulderWidth".ToLower())
-                    {
-                        objectSpawner.SpaceBetween = request.parameterValue;
-                    }
-                    else if (request.parameterToChange.ToLower() == "Ducking".ToLower())
-                    {
-                        objectSpawner.IncludeDucking = request.parameterValue != 0;
-                    }
-                    else if (request.parameterToChange.ToLower() == "Movement".ToLower())
-                    {
-                        objectSpawner.IncludeMovement = request.parameterValue != 0;
-                    }
-                    else if (request.parameterToChange.ToLower() == "WaitBetweenSpawns".ToLower())
-                    {
-                        objectSpawner.TimeBetweenSpawnsInSec = (int)request.parameterValue;
-                    }
+
                     break;
                 default:
                     break;
             }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+    }
+
+    void GetSceneNameAndReload()
+    {
+        try
+        {
+            MainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                Debug.Log(levelManager.GetActiveScene());
+                UpdateScene(levelManager.GetActiveScene());
+            });
         }
         catch (Exception ex)
         {
@@ -222,55 +318,9 @@ public class UnityServer : MonoBehaviour
 
     void ChangeScene(SceneChange sceneChange)
     {
-        AsyncOperation status;
         try
         {
-            switch (sceneChange.destinationScene.ToLower())
-            {
-                case "level1":
-                    MainThreadDispatcher.Instance().Enqueue(() =>
-                    {
-                        status = SceneManager.LoadSceneAsync("Level 1");
-                        status.completed += (x) =>
-                        {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
-                            touchObject = objectSpawner.Objects;
-                        };
-                    }
-                    );
-
-                    break;
-                case "level2":
-                    MainThreadDispatcher.Instance().Enqueue(() =>
-                    {
-                        status = SceneManager.LoadSceneAsync("Level 2");
-                        status.completed += (x) =>
-                        {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
-                            touchObject = objectSpawner.Objects;
-                        };
-                    });
-                    break;
-                case "level3":
-                    MainThreadDispatcher.Instance().Enqueue(() =>
-                    {
-                        status = SceneManager.LoadSceneAsync("Level 3");
-                        status.completed += (x) =>
-                        {
-                            objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
-                            touchObject = objectSpawner.Objects;
-                        };
-                    });
-                    break;
-                case "mainmenu":
-                    MainThreadDispatcher.Instance().Enqueue(() => SceneManager.LoadSceneAsync("MainMenu"));
-                    break;
-                case "quit":
-                    MainThreadDispatcher.Instance().Enqueue(() => levelManager.QuitLevel());
-                    break;
-                default:
-                    break;
-            }
+            UpdateScene(sceneChange.destinationScene.ToLower());
         }
         catch (Exception ex)
         {
@@ -278,9 +328,57 @@ public class UnityServer : MonoBehaviour
         }
     }
 
-    private void Status_completed(AsyncOperation obj)
+    private void UpdateScene(string sceneName)
     {
-        throw new NotImplementedException();
+        AsyncOperation status;
+        switch (sceneName.ToLower())
+        {
+            case "level 1":
+            case "level1":
+                MainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    status = SceneManager.LoadSceneAsync("Level 1");
+                    status.completed += (x) =>
+                    {
+                        objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
+                        touchObject = objectSpawner.Objects;
+                    };
+                }
+                );
+                break;
+            case "level 2":
+            case "level2":
+                MainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    status = SceneManager.LoadSceneAsync("Level 2");
+                    status.completed += (x) =>
+                    {
+                        objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
+                        touchObject = objectSpawner.Objects;
+                    };
+                });
+                break;
+            case "level 3":
+            case "level3":
+                MainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    status = SceneManager.LoadSceneAsync("Level 3");
+                    status.completed += (x) =>
+                    {
+                        objectSpawner = GameObject.FindGameObjectWithTag("SpawnPlane").GetComponent<ObjectSpawnerV2>();
+                        touchObject = objectSpawner.Objects;
+                    };
+                });
+                break;
+            case "mainmenu":
+                MainThreadDispatcher.Instance().Enqueue(() => SceneManager.LoadSceneAsync("MainMenu"));
+                break;
+            case "quit":
+                MainThreadDispatcher.Instance().Enqueue(() => levelManager.QuitLevel());
+                break;
+            default:
+                break;
+        }
     }
 
     void SendOkResponse(HttpListenerContext context)

@@ -7,6 +7,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public List<TouchObject> Objects;
     public MaterialStorage Storage;
     public UpdateProgressBar ProgressBar;
+    //public Task
     public int LevelLengthInSec = 180;
     public int TimeBetweenSpawnsInSec = 2;
     public bool InfiniteSpawn = false;
@@ -20,9 +21,6 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     //The colors that you want to spawn
     public List<string> ColorsToSpawn = new List<string>();
-
-    //Amount of objects to hit per color
-    public Dictionary<string, int> AmountPerColor = new Dictionary<string, int>();
 
     void Start()
     {
