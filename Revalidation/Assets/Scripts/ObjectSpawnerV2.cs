@@ -97,6 +97,8 @@ public class ObjectSpawnerV2 : MonoBehaviour
                 spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
             else
                 spawnObjectRenderer.material = Storage.MaterialDictionary["balloon"];
+
+            touchObject.Color = "";
         }
         return touchObject;
     }

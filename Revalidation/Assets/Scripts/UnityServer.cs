@@ -12,6 +12,7 @@ public class UnityServer : MonoBehaviour
     private const string prefix = "http://localhost:8085/";
     private static UnityServer instance;
     public ObjectSpawnerV2 objectSpawner;
+    public HandSelector handSelector;
     private List<TouchObject> touchObject;
     private HttpListener listener;
     private bool isRunning;
@@ -187,6 +188,25 @@ public class UnityServer : MonoBehaviour
                         foreach (TouchObject spawnObject in touchObject)
                         {
                             spawnObject.Speed = request.parameterValue;
+                        }
+                    }
+                    break;
+                case "handSelector":
+                    if (request.parameterToChange == "hand")
+                    {
+                        switch (request.parameterValue)
+                        {
+                            case -1:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("left"));
+                                break;
+                            case 0:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("both"));
+                                break;
+                            case 1:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("right"));
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;

@@ -43,3 +43,87 @@ The objects that get spawned all have a touchObject script attached to them that
 ### Unity server
 
 This script creates and starts a unity server on a seperate thread. This server can be accessed by our Angular frontend with http requests so that the occupational therapist can change the different parameters of the Setspawner and touchObject scripts. While the application is running.
+
+### UpdateProgressBar
+
+This is the largest script which handles and centralizes all of the gamelogic. It is used to store all of the different variables such as amount of times patient has hit an obstacle, amount of time patient has hit an object with their head, amount of time a patient has hit a not target fish, amount of times a patient has hit a target fish with their right and left controller and so on.
+
+It is also necessary for showing the progress of the patient using the progress bar in the top left corner of the level. It also shows the patient how many of each fish color they still have to catch.
+
+It has multiple methods for handling certain events.
+
+1. MissedObject(bool IsTargetFish, string color): This method is called when a touchObject hits the target at the end of the path. If the object is a target fish, then it will use the color parameter to add a missed fish of the corresponding color. This information (Amount of missed fish for each color) gets shown at the end of the level in the stats screen.
+
+2. HitNotTargetFish(): This method is called when a patient hit a fish which wasn't a target fish. When this happens, it will add a missed fish of a random color. This way a patient has to hit an extra fish to complete the level.
+
+3. HitObstacle(): This method is called when a patient hits an obstacle with their fishnet or with the vr headset. Just like the previous method will it randomly add a missed fish of a random color.
+
+4. HitObjectWithHead(): This method gets called when a patient hits a fish with their head. It will do the same as the previous 2 methods.
+
+5. HitObject(string hand, string color): This method is called when a patient catches a target fish. It uses the hand parameter to give the corresponding hand an extra point so that it can be shown at the end of the level at the stats screen. It will also update which color of fish was hit. Afterwards it checks if the player has hit all of the necessary fish. If this is the case, the objectspawnerV2 will then stop spawning fish and all of the current objects in the scene get removed. It will then show the winning screen.
+
+6. SetStatsScreenText(bool lost): This method gets called when the player has won or lost. It will show all of the details and information that has been collected throughout the duration of the level.
+
+### Fishnet collision
+
+This script is used for checking when a fishnet collides with an obstacle, fish or target fish. When it hits either of those 3, a corresponding method of the updateProgressbar script is called. It is important to exclude the post processing volumes in the collission, because it will otherwise delete these volumes and your underwater effect will dissappear.
+
+When the fishnet collides with a fish, it will check if it is of type 'touchObject' (which is another script) and then it will check if this fish has already been hit by a fishnet. This check is necessary because otherwise there is a chance that the corresponding method gets called multiple times. This is because the fishnet has multiple colliders and if you move fast enough, most of them get triggered.
+
+If the fish has not been hit yet and it is a target fish, it will call the HitObject() method from the updateProgressbar script. It will give the hand and the color of the target fish as parameters. All of this is necessary for the stats screen at the end of the level.
+
+If the fish is not a target fish, the HitNotTargetFish() script will be called so that it can also be shown at the end of the level on the stats screen.
+
+If it is an obstacle, it will call the HitObstacle() method so that it can be shown at the end of the level like the other methods.
+
+---
+
+### Small scripts
+
+We wrote a few small scripts that had a single purpose.
+
+- #### **Close pause menu**
+
+  This script is used to open and close the pause menu were a patient can switch levels.
+
+- #### **Close task menu**
+
+  This script is used to close the task menu that appears at the beginning of a level. After 3 seconds, the menu dissapears again so that the level can start.
+
+- #### **HandSelector**
+
+  This script is used so that the physical therapist can choose which hand is used for catching the fish. He/She can choose between left, right and both hands. This script uses the XRInteractionManager to make the XRGrabInteracteable be selected when it gets activated.
+
+- #### **Levelmanager**
+
+  This script is used to exit the game, go to a different level, or get the active level.
+
+- #### **MainThreadDispatcher**
+
+  This script is from [github, made by PimDeWitte](https://github.com/PimDeWitte/UnityMainThreadDispatcher/blob/master/Runtime/UnityMainThreadDispatcher.cs). It is used to access the main thread of the game runtime. This is necessary because the unity server is running on a seperate thread where certain actions are not possible such as changing a scene, getting objects in a scene etc.
+
+- #### **MaterialStorage**
+
+  This scripts is used to store all of the available materials. These materials can be accessed in other scripts to apply to the necessary fish objects. This script also has a method to get the materials that are related to the fish that a patient has to touch.
+
+- #### **Rotate Rock**
+
+  This script is used to rotate the rock obstacle.
+
+- #### **TaskMenu**
+
+  This script is used to set the text of the task menu that appears at the beginning of a level. It has a link to the updateProgressBar script so that it can see how many of each fish a patient has to catch.
+
+- #### **TouchObject**
+
+  This script is attached to every object that gets spawned in the ObjectSpawnerV2, ObjectSpawner and SetSpawner. In this script, you can change the speed of the object, set the color that it gets spawned with, if it has gotten hit yet and if it is a target fish or not.
+
+  This script is also used to rotate every object that gets out of the spawner because they are sometimes turned around. It also has an onTriggerEnter method were it will hit the targetPlane at the end of a level. If it hits this plane, the MissedObject() method of the updateProgressBar script is called.
+
+- #### **VR headset Collision**
+
+  This script is used to count and destroy all of the objects that a patient hits with the vr headset. The amount gets stored in another script where, at the end of a level, a stats menu gets shown where the patient can see how many times he/she hit an object with their head.
+
+- #### **Xr Handler**
+
+  This script is used to bind the close task menu script to the right controller. When a player presses a button, the menu appears/dissappears.

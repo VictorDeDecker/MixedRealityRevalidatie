@@ -332,5 +332,44 @@
         </button>
       </div>
     </div>
+
+    <div class="box mt-5">
+      <p>In which hand should there be a fish net?</p>
+      <label class="label"
+        ><input
+          type="radio"
+          id="left"
+          name="hands"
+          [value]="'left'"
+          [(ngModel)]="hand"
+          (click)="updateHand('left')"
+        />
+        Left hand</label
+      >
+
+      <label class="label">
+        <input
+          type="radio"
+          id="right"
+          name="hands"
+          [value]="'right'"
+          [(ngModel)]="hand"
+          (click)="updateHand('right')"
+        />
+        Right hand</label
+      >
+
+      <label class="label"
+        ><input
+          type="radio"
+          id="both"
+          name="hands"
+          [value]="'both'"
+          [(ngModel)]="hand"
+          (click)="updateHand('both')"
+        />
+        Both hands</label
+      >
+    </div>
   </div>
 </div>

@@ -590,7 +590,8 @@ MonoBehaviour:
   Speed: 2
   Rotation: 90
   IsTargetFish: 0
-  Color: yellow
+  HasBeenHit: 0
+  Color: 
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
