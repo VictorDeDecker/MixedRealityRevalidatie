@@ -46,9 +46,4 @@ public class TaskMenu : MonoBehaviour
             YellowFish.gameObject.SetActive(false);
 
     }
-
-    void Update()
-    {
-
-    }
 }

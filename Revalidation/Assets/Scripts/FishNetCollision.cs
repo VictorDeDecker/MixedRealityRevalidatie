@@ -17,14 +17,17 @@ public class FishNetCollision : MonoBehaviour
         if (other.CompareTag("Fish"))
         {
             if (other.gameObject.GetComponent<TouchObject>() is not TouchObject touchObject) return;
+            if (!touchObject.HasBeenHit)
+            {
+                if (touchObject.IsTargetFish)
+                    progressBar.HitObject(Hand, touchObject.Color);
+                else
+                    progressBar.HitNotTargetFish();
+            }
 
-            if (touchObject.IsTargetFish)
-                progressBar.HitObject(Hand, touchObject.Color);
-            else
-                progressBar.HitNotTargetFish();
+            touchObject.HasBeenHit = true;
 
             Destroy(other.gameObject);
-
         }
         else if (other.CompareTag("Ship") || other.CompareTag("RockTarget") || other.CompareTag("Submarine") || other.CompareTag("Shark"))
         {

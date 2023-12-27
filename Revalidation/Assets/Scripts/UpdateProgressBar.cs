@@ -93,6 +93,10 @@ public class UpdateProgressBar : MonoBehaviour
     {
         progressBar.type = Image.Type.Filled;
         progressBar.fillMethod = Image.FillMethod.Horizontal;
+        if (UnityServer.objectSpawner == null)
+        {
+            UnityServer.objectSpawner = FindObjectOfType<ObjectSpawnerV2>();
+        }
         SetFishScores();
         amountOfObjectsToHit = AmountOfRedFishesToHit + AmountOfPinkFishesToHit + AmountOfGreenFishesToHit + AmountOfYellowFishesToHit;
         UpdateProgress();
@@ -100,7 +104,7 @@ public class UpdateProgressBar : MonoBehaviour
 
     private void Update()
     {
-        if (!won)
+        if (!won && !lost)
             CurrentTime += Time.deltaTime;
         CheckIfLost();
     }
@@ -170,7 +174,7 @@ public class UpdateProgressBar : MonoBehaviour
         UpdateColorHit(color);
         UpdateHandHit(hand);
 
-        if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2)) > amountOfObjectsToHit && !lost && CheckIfHasWon())
+        if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + hitNotTargetFish) > amountOfObjectsToHit && !lost && CheckIfHasWon())
         {
             UnityServer.objectSpawner.IsSpawning = false;
             won = true;
@@ -181,6 +185,7 @@ public class UpdateProgressBar : MonoBehaviour
                 Destroy(touchObjects[i].gameObject);
             }
 
+            SetStatsScreenText(false);
             WinScreen.gameObject.SetActive(true);
         }
         UpdateProgress();
@@ -198,6 +203,8 @@ public class UpdateProgressBar : MonoBehaviour
             {
                 Destroy(touchObjects[i].gameObject);
             }
+
+            SetStatsScreenText(true);
             LoseScreen.gameObject.SetActive(true);
         }
         UpdateProgress();
@@ -237,7 +244,7 @@ public class UpdateProgressBar : MonoBehaviour
     {
         if (!won && !lost)
         {
-            var progress = (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish / 2))) / amountOfObjectsToHit;
+            var progress = (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish))) / amountOfObjectsToHit;
             progressBar.fillAmount = progress;
         }
     }
@@ -258,22 +265,22 @@ public class UpdateProgressBar : MonoBehaviour
         if (AmountOfRedFishesToHit == 0)
             RedFishScore.text = "";
         else
-            RedFishScore.text = $"{RedFishesHit}/{AmountOfRedFishesToHit} Red Fish ({RedFishesMissed} missed)";
+            RedFishScore.text = $"{RedFishesHit - RedFishesMissed}/{AmountOfRedFishesToHit} Red Fish ({RedFishesMissed} missed)";
 
         if (AmountOfPinkFishesToHit == 0)
             PinkFishScore.text = "";
         else
-            PinkFishScore.text = $"{PinkFishesHit}/{AmountOfPinkFishesToHit} Pink Fish ({PinkFishesMissed} missed)";
+            PinkFishScore.text = $"{PinkFishesHit - PinkFishesMissed}/{AmountOfPinkFishesToHit} Pink Fish ({PinkFishesMissed} missed)";
 
         if (AmountOfGreenFishesToHit == 0)
             GreenFishScore.text = "";
         else
-            GreenFishScore.text = $"{GreenFishesHit}/{AmountOfGreenFishesToHit} Green Fish ({GreenFishesMissed} missed)";
+            GreenFishScore.text = $"{GreenFishesHit - GreenFishesMissed}/{AmountOfGreenFishesToHit} Green Fish ({GreenFishesMissed} missed)";
 
         if (AmountOfYellowFishesToHit == 0)
             YellowFishScore.text = "";
         else
-            YellowFishScore.text = $"{YellowFishesHit}/{AmountOfYellowFishesToHit} Yellow Fish ({YellowFishesMissed} missed)";
+            YellowFishScore.text = $"{YellowFishesHit - YellowFishesMissed}/{AmountOfYellowFishesToHit} Yellow Fish ({YellowFishesMissed} missed)";
     }
 
     public void CheckColorAmount()
@@ -381,5 +388,34 @@ public class UpdateProgressBar : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void SetStatsScreenText(bool lost)
+    {
+        StatsScreen.gameObject.SetActive(true);
+        CompletedTime.text = $"You completed the level in {Mathf.RoundToInt(CurrentTime)} seconds";
+        TotalFishCaught.text = $"You caught a total of {hitObjects} fish";
+
+        if (lost)
+        {
+            MissedRedFish.text = $"You missed {RedFishesMissed} red fish, you hit {Mathf.RoundToInt(((RedFishesHit - RedFishesMissed) / AmountOfRedFishesToHit) * 100)}% of red fish";
+            MissedPinkFish.text = $"You missed {PinkFishesMissed} pink fish, you hit {Mathf.RoundToInt(((PinkFishesHit - PinkFishesMissed) / AmountOfPinkFishesToHit) * 100)}% of pink fish";
+            MissedGreenFish.text = $"You missed {GreenFishesMissed} green fish, you hit {Mathf.RoundToInt(((GreenFishesHit - GreenFishesMissed) / AmountOfGreenFishesToHit) * 100)}% of green fish";
+            MissedYellowFish.text = $"You missed {YellowFishesMissed} yellow fish, you hit {Mathf.RoundToInt(((YellowFishesHit - YellowFishesMissed) / AmountOfYellowFishesToHit) * 100)}% of yellow fish";
+        }
+        else
+        {
+            MissedRedFish.text = $"You missed {RedFishesMissed} red fish, you hit {Mathf.RoundToInt(RedFishesHit)} red fish";
+            MissedPinkFish.text = $"You missed {PinkFishesMissed} pink fish, you hit {Mathf.RoundToInt(PinkFishesHit)} pink fish";
+            MissedGreenFish.text = $"You missed {GreenFishesMissed} green fish, you hit {Mathf.RoundToInt(GreenFishesHit)} green fish";
+            MissedYellowFish.text = $"You missed {YellowFishesMissed} yellow fish, you hit {Mathf.RoundToInt(YellowFishesHit)} yellow fish";
+        }
+
+        WrongFishCaught.text = $"You caught {hitNotTargetFish} wrong fish";
+        HitWithHead.text = $"You hit {hitObjectWithHead} things with your head";
+        ObstaclesHit.text = $"You hit {hitObstacle} obstacles";
+
+        RightHandHit.text = $"You caught {hitWithRightHand} fish with your right hand, ({Mathf.RoundToInt((hitWithRightHand / hitObjects) * 100)}%)";
+        LeftHandHit.text = $"You caught {hitWithLeftHand} fish with your left hand, ({Mathf.RoundToInt((hitWithLeftHand / hitObjects) * 100)}%)";
     }
 }
