@@ -13,6 +13,19 @@ public class UpdateProgressBar : MonoBehaviour
     public TextMeshProUGUI YellowFishScore;
     public UnityServer UnityServer;
 
+    public Canvas StatsScreen;
+    public TextMeshProUGUI CompletedTime;
+    public TextMeshProUGUI TotalFishCaught;
+    public TextMeshProUGUI MissedRedFish;
+    public TextMeshProUGUI MissedPinkFish;
+    public TextMeshProUGUI MissedGreenFish;
+    public TextMeshProUGUI MissedYellowFish;
+    public TextMeshProUGUI WrongFishCaught;
+    public TextMeshProUGUI HitWithHead;
+    public TextMeshProUGUI ObstaclesHit;
+    public TextMeshProUGUI RightHandHit;
+    public TextMeshProUGUI LeftHandHit;
+
     public float TimeToComplete = 60f;
     public float CurrentTime = 0f;
 
@@ -333,7 +346,7 @@ public class UpdateProgressBar : MonoBehaviour
     private void AddRandomMissedFish()
     {
         bool foundPossibleFish = false;
-        while (foundPossibleFish)
+        while (!foundPossibleFish)
         {
             switch (Random.Range(0, 4))
             {

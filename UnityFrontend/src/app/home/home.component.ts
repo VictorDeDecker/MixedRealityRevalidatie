@@ -28,6 +28,7 @@ export class HomeComponent {
   greenFish:number = 0;
   allowYellowFish:boolean = true;
   yellowFish:number = 0;
+  hand:string = "both";
 
   constructor(private unityService:UnityService){
     setInterval(()=>{
@@ -321,5 +322,24 @@ export class HomeComponent {
   
       (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
     }
+  }
+
+  async updateHand(hand:string){
+    this.hand = hand;
+    var value = 0;
+    if(this.hand=="both"){
+      value = 0
+    } else if(this.hand=="right"){
+      value = 1
+    } else if(this.hand=="left"){
+      value = -1;
+    }
+    let parameterChangeRequest:ParameterChangeRequest = {
+      script: "handSelector",
+      parameter: "hand",
+      value: value
+    };
+
+    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
   }
 }

@@ -18,7 +18,6 @@ export class UnityService {
   }
 
   async sendParameterToUnity(parameterChangeRequest:ParameterChangeRequest){
-    console.log(parameterChangeRequest.parameter)
     return this.http.post<UnityResponse>(url + "/updateParameter", parameterChangeRequest);
   }
 
