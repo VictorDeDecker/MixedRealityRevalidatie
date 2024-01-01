@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyPlaneTag: Target
-  Speed: 2
+  Speed: 5
   Rotation: 90
   IsTargetFish: 1
   HasBeenHit: 0

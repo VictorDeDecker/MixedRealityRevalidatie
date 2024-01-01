@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UnityResponse } from './UnityResponse';
 import { ParameterChangeRequest } from './ParameterChangeRequest';
 import { SceneChange } from './SceneChange';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 const url:string = "http://localhost:8085"
 
@@ -10,23 +11,29 @@ const url:string = "http://localhost:8085"
   providedIn: 'root'
 })
 export class UnityService {
+  private hubConnection: HubConnection;
 
-  constructor(private http: HttpClient) { }
+  constructor() {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl('https://localhost:32768/gameHub')
+      .build();
 
-  async testConnection() {
-    return this.http.get<UnityResponse>(url + "/test");
+      this.startConnection();
   }
 
-  async sendParameterToUnity(parameterChangeRequest:ParameterChangeRequest){
-    console.log(parameterChangeRequest.parameter)
-    return this.http.post<UnityResponse>(url + "/updateParameter", parameterChangeRequest);
+  startConnection() {
+    this.hubConnection.start()
+      .then(() => console.log('Connection started'))
+      .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  async sendLevelToUnity(SceneChange:SceneChange){
-    return this.http.post<UnityResponse>(url + "/changeScene", SceneChange);
+  updateParameters(parameters: ParameterChangeRequest) {
+    this.hubConnection.invoke('UpdateParameters', parameters)
+      .catch(err => console.error(err));
   }
 
-  async getTextureData(){
-    
+  updateScene(scene:SceneChange) {
+    this.hubConnection.invoke('UpdateScene', scene)
+      .catch(err => console.log(err));
   }
 }
