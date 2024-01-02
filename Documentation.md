@@ -28,7 +28,7 @@ Now you will have the underwater look, but you can also add some fog to improve 
 
 ## Angular Frontend
 
-We have created an angular frontend website so that the occupational therapist can access and influence different parameters of the Unity game. For example: the speed of objects, length of the level, amount of rows and more can be changed. The level can also be switch on the site. All of these changes are accomplished using http requests to communicate with the unity server.
+We have created an angular frontend website so that the occupational therapist can access and influence different parameters of the Unity game. For example: the speed of objects, length of the level, amount of rows and more can be changed. The level can also be switched on the site. All of these changes are accomplished using a websocket connection to communicate with the websocket on a remote server that communicates with the unity backend server script.
 
 ## Scripts
 
@@ -42,7 +42,7 @@ The objects that get spawned all have a touchObject script attached to them that
 
 ### Unity server
 
-This script creates and starts a unity server on a seperate thread. This server can be accessed by our Angular frontend with http requests so that the occupational therapist can change the different parameters of the Setspawner and touchObject scripts. While the application is running.
+This script starts a websocket hub connection using signalR to connect to the remote websocket. This websocket can listen to updateParameter requests and gives these parameters to all of its listening clients. This way the occupational therapist can change the different parameters of the project.
 
 ### UpdateProgressBar
 
