@@ -130,7 +130,7 @@ MonoBehaviour:
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
-  Scene: Level 1
+  Scene: Level2
 --- !u!136 &3037749046122689430
 CapsuleCollider:
   m_ObjectHideFlags: 0

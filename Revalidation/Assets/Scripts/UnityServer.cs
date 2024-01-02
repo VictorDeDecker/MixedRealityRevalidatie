@@ -106,25 +106,6 @@ public class UnityServer : MonoBehaviour
                         }
                     }
                     break;
-                case "handSelector":
-                    if (request.parameterToChange == "hand")
-                    {
-                        switch (request.parameterValue)
-                        {
-                            case -1:
-                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("left"));
-                                break;
-                            case 0:
-                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("both"));
-                                break;
-                            case 1:
-                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("right"));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    break;
                 case "objectSpawner":
                     switch (request.Parameter.ToLower())
                     {
