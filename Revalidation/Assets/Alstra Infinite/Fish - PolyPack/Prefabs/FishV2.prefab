@@ -52,7 +52,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4e154bb55ae560d4a8ff76323eb45b08, type: 2}
+  - {fileID: 2100000, guid: b363103bb9b5c354299795e49d6d7b03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -587,16 +587,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyPlaneTag: Target
-  Speed: 5
+  Speed: 2
   Rotation: 90
   IsTargetFish: 1
   HasBeenHit: 0
-  Color: green
+  Color: yellow
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level 1
 --- !u!95 &9191125292701657807
 Animator:
   serializedVersion: 4

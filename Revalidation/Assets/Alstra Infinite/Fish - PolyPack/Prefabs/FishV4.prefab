@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyPlaneTag: Target
-  Speed: 5
+  Speed: 2
   Rotation: 90
   IsTargetFish: 0
   HasBeenHit: 0
@@ -130,6 +130,7 @@ MonoBehaviour:
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level2
 --- !u!136 &3037749046122689430
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -212,7 +213,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2de3cd7a6f6984141b61a1fb6efe536f, type: 2}
+  - {fileID: 2100000, guid: 284830dd46ce77c4696ef63853c7cf5e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

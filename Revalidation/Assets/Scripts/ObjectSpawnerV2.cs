@@ -19,6 +19,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
     public bool IncludeMovement = false;
     public bool IncludeObstacles = false;
     public bool IsSpawning = true;
+    public string Scene = "Level2";
 
     //The colors that you want to spawn
     public List<string> ColorsToSpawn = new List<string>();
@@ -59,6 +60,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
         if (spawnObject.gameObject.CompareTag("Fish"))
             UpdateMaterial(spawnObject);
 
+        spawnObject.Scene = Scene;
 
         Instantiate(spawnObject.gameObject, RandomSpawnPoint(), Quaternion.identity);
     }
@@ -93,10 +95,36 @@ public class ObjectSpawnerV2 : MonoBehaviour
         {
             touchObject.IsTargetFish = false;
             var spawnObjectRenderer = touchObject.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (Random.Range(0, 2) == 0)
-                spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
+            if (Scene == "Level2")
+            {
+                if (Random.Range(0, 2) == 0)
+                    spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
+                else
+                    spawnObjectRenderer.material = Storage.MaterialDictionary["balloon"];
+            }
+            else if (Scene == "Level3")
+            {
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
+                        break;
+                    case 1:
+                        spawnObjectRenderer.material = Storage.MaterialDictionary["balloon"];
+                        break;
+                    case 2:
+                        spawnObjectRenderer.material = Storage.MaterialDictionary["glow"];
+                        break;
+                }
+            }
             else
-                spawnObjectRenderer.material = Storage.MaterialDictionary["balloon"];
+            {
+                if (Random.Range(0, 2) == 0)
+                    spawnObjectRenderer.material = Storage.MaterialDictionary["Main"];
+                else
+                    spawnObjectRenderer.material = Storage.MaterialDictionary["balloon"];
+            }
+
 
             touchObject.Color = "";
         }

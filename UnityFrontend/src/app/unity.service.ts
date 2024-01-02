@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UnityResponse } from './UnityResponse';
 import { ParameterChangeRequest } from './ParameterChangeRequest';
 import { SceneChange } from './SceneChange';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
-const url:string = "http://localhost:8085"
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +12,7 @@ export class UnityService {
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:32768/gameHub')
+      .withUrl('http://45.93.139.33:32825/gameHub')
       .build();
 
       this.startConnection();

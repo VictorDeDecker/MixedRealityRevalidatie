@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  websocket:
+    image: ${DOCKER_REGISTRY-}websocket
+    build:
+      context: .
+      dockerfile: Websocket/Dockerfile

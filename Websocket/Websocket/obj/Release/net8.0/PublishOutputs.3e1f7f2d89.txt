@@ -1,0 +1,13 @@
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Websocket.exe
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\appsettings.Development.json
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\appsettings.json
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Websocket.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Websocket.deps.json
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Websocket.runtimeconfig.json
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Websocket.pdb
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\System.Web.Cors.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Microsoft.OpenApi.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Newtonsoft.Json.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Swashbuckle.AspNetCore.Swagger.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\School\Jaar3\Sem1\MixedReality\Project\MixedRealityRevalidatie\Websocket\Websocket\obj\Docker\publish\Swashbuckle.AspNetCore.SwaggerUI.dll

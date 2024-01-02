@@ -13,6 +13,7 @@ public class TouchObject : MonoBehaviour
     public Vector3 BalloonDirection = new Vector3(0f, 0f, -1f);
     public Vector3 SeagullDirection = new Vector3(0f, 0f, -1f);
     public UpdateProgressBar ProgressBar;
+    public string Scene = "Level2";
 
     void Start()
     {
@@ -20,16 +21,24 @@ public class TouchObject : MonoBehaviour
         {
             ProgressBar = FindObjectOfType<UpdateProgressBar>();
         }
-        transform.Rotate(0, Rotation, 0);
 
-        if (transform.CompareTag("Ship"))
+        if (Scene == "Level2")
         {
-            transform.Rotate(new Vector3(90f, 0, 0));
+            transform.Rotate(0, Rotation, 0);
+
+            if (transform.CompareTag("Ship"))
+            {
+                transform.Rotate(new Vector3(90f, 0, 0));
+            }
+
+            if (transform.CompareTag("Balloon"))
+            {
+                transform.Rotate(new Vector3(-90f, 0, 0));
+            }
         }
-
-        if (transform.CompareTag("Balloon"))
+        else
         {
-            transform.Rotate(new Vector3(-90f, 0, 0));
+            transform.Rotate(0, -90, 0);
         }
 
         if (transform.CompareTag("Seagull"))

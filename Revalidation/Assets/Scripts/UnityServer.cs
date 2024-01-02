@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class UnityServer : MonoBehaviour
 {
     private static UnityServer instance;
-    private const string SignalRHubUrl = "https://localhost:32768/gameHub";
+    private const string SignalRHubUrl = "http://45.93.139.33:32836/gameHub";
     private HubConnection hubConnection;
     public ObjectSpawnerV2 objectSpawner;
     public HandSelector handSelector;
