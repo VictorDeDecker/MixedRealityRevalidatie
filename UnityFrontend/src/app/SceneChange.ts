@@ -1,3 +1,3 @@
 export interface SceneChange{
-    scene:string
+    destinationScene:string
 }

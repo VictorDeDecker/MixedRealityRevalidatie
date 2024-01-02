@@ -31,19 +31,6 @@ export class HomeComponent {
   hand:string = "both";
 
   constructor(private unityService:UnityService){
-    setInterval(()=>{
-      this.testConnection()
-    },5000)
-  }
-
-  async testConnection(){
-    (await this.unityService.testConnection()).subscribe(value => {
-      if(value.message = "OK") {
-        this.response = "Connected"
-      } else {
-        this.response = "Disconnected"
-      }
-    });
   }
 
   async applyAmountOfSeconds() {
@@ -52,8 +39,7 @@ export class HomeComponent {
       parameter: "LevelLengthInSec",
       value: (this.timeInSeconds + (this.InfiniteSpawnWaitTime * this.height)/2)
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyHeight() {
@@ -62,8 +48,7 @@ export class HomeComponent {
       parameter: "Height",
       value: this.height
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applySpeed() {
@@ -72,8 +57,7 @@ export class HomeComponent {
       parameter: "speed",
       value: this.speed
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applySpawnRadius(){
@@ -82,8 +66,7 @@ export class HomeComponent {
       parameter: "Radius",
       value: this.SpawnRadius
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyCircleWidth(){
@@ -92,8 +75,7 @@ export class HomeComponent {
       parameter: "ShoulderWidth",
       value: this.spaceBetweenCircles
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyInfiniteSpawnWaitTime(){
@@ -102,8 +84,7 @@ export class HomeComponent {
       parameter: "WaitBetweenSpawns",
       value: this.InfiniteSpawnWaitTime
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async checkDucking(){
@@ -111,18 +92,16 @@ export class HomeComponent {
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "ducking",
-        value: 0
+        value: 1
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     } else{
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "ducking",
-        value: 1
+        value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -131,18 +110,16 @@ export class HomeComponent {
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "movement",
-        value: 0
+        value: 1
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     } else{
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "movement",
-        value: 1
+        value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -151,89 +128,116 @@ export class HomeComponent {
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "obstacles",
-        value: 0
+        value: 1
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     } else{
       let parameterChangeRequest:ParameterChangeRequest = {
         script: "objectSpawner",
         parameter: "obstacles",
-        value: 1
+        value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
   async changeLevel(level:string){
     let changeLevel: SceneChange = {
-      scene: level
+      destinationScene: level
     };
-
-    (await this.unityService.sendLevelToUnity(changeLevel)).subscribe(value => this.response = value.message);
+    this.unityService.updateScene(changeLevel);
   }
 
   async veryEasy(){
     this.speed = 2;
-    this.height = 20;
-    this.timeInSeconds = 30;
-    this.SpawnRadius = 65;
-    this.InfiniteSpawnWaitTime = 4;
+    this.timeInSeconds = 180;
+    this.spaceBetweenCircles = 4
+    this.SpawnRadius = 2;
+    this.InfiniteSpawnWaitTime = 2;
+    this.obstacles = false;
+    this.ducking = false;
+    this.movement = false;
     this.applySpeed();
-    this.applyHeight();
     this.applyAmountOfSeconds();
+    this.applyCircleWidth();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+    this.checkObstacles();
+    this.checkDucking();
+    this.checkMovement();
   }
 
   async easy(){
     this.speed = 3;
-    this.height = 40;
-    this.timeInSeconds = 30;
-    this.SpawnRadius = 60;
-    this.InfiniteSpawnWaitTime = 4;
+    this.timeInSeconds = 150;
+    this.spaceBetweenCircles = 4
+    this.SpawnRadius = 2;
+    this.InfiniteSpawnWaitTime = 2;
+    this.obstacles = false;
+    this.ducking = true;
+    this.movement = true;
     this.applySpeed();
-    this.applyHeight();
     this.applyAmountOfSeconds();
+    this.applyCircleWidth();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+    this.checkObstacles();
+    this.checkDucking();
+    this.checkMovement();
   }
   async normal(){
-    this.speed = 4;
-    this.height = 50;
-    this.timeInSeconds = 20;
-    this.SpawnRadius = 50;
-    this.InfiniteSpawnWaitTime = 3;
+    this.speed = 3;
+    this.timeInSeconds = 150;
+    this.spaceBetweenCircles = 4
+    this.SpawnRadius = 2;
+    this.InfiniteSpawnWaitTime = 2;
+    this.obstacles = false;
+    this.ducking = true;
+    this.movement = true;
     this.applySpeed();
-    this.applyHeight();
     this.applyAmountOfSeconds();
+    this.applyCircleWidth();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+    this.checkObstacles();
+    this.checkDucking();
+    this.checkMovement();
   }
   async hard(){
     this.speed = 4;
-    this.height = 50;
-    this.timeInSeconds = 10;
-    this.SpawnRadius = 40;
-    this.InfiniteSpawnWaitTime = 2;
+    this.timeInSeconds = 150;
+    this.spaceBetweenCircles = 4
+    this.SpawnRadius = 2;
+    this.InfiniteSpawnWaitTime = 1;
+    this.obstacles = true;
+    this.ducking = true;
+    this.movement = true;
     this.applySpeed();
-    this.applyHeight();
     this.applyAmountOfSeconds();
+    this.applyCircleWidth();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+    this.checkObstacles();
+    this.checkDucking();
+    this.checkMovement();
   }
   async veryHard(){
     this.speed = 5;
-    this.height = 50;
-    this.timeInSeconds = 1;
-    this.SpawnRadius = 30;
-    this.InfiniteSpawnWaitTime = 2;
+    this.timeInSeconds = 150;
+    this.spaceBetweenCircles = 5
+    this.SpawnRadius = 3;
+    this.InfiniteSpawnWaitTime = 1;
+    this.obstacles = true;
+    this.ducking = true;
+    this.movement = true;
     this.applySpeed();
-    this.applyHeight();
     this.applyAmountOfSeconds();
+    this.applyCircleWidth();
     this.applySpawnRadius();
     this.applyInfiniteSpawnWaitTime();
+    this.checkObstacles();
+    this.checkDucking();
+    this.checkMovement();
   }
 
   async applyRedFish(){
@@ -242,8 +246,7 @@ export class HomeComponent {
       parameter: "redFishAmount",
       value: this.redFish
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyPinkFish(){
@@ -252,8 +255,7 @@ export class HomeComponent {
       parameter: "pinkFishAmount",
       value: this.pinkFish
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyGreenFish(){
@@ -262,8 +264,7 @@ export class HomeComponent {
       parameter: "greenFishAmount",
       value: this.greenFish
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async applyYellowFish(){
@@ -272,8 +273,7 @@ export class HomeComponent {
       parameter: "yellowFishAmount",
       value: this.yellowFish
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 
   async checkRedFish(){
@@ -283,8 +283,7 @@ export class HomeComponent {
         parameter: "allowRedFish",
         value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -295,8 +294,7 @@ export class HomeComponent {
         parameter: "allowPinkFish",
         value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -307,8 +305,7 @@ export class HomeComponent {
         parameter: "allowGreenFish",
         value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -319,8 +316,7 @@ export class HomeComponent {
         parameter: "allowYellowFish",
         value: 0
       };
-  
-      (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+      this.unityService.updateParameters(parameterChangeRequest);
     }
   }
 
@@ -339,7 +335,6 @@ export class HomeComponent {
       parameter: "hand",
       value: value
     };
-
-    (await this.unityService.sendParameterToUnity(parameterChangeRequest)).subscribe(value => this.changeParameterResponse = value.message);
+    this.unityService.updateParameters(parameterChangeRequest);
   }
 }

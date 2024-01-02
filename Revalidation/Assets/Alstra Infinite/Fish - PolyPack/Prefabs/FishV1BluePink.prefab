@@ -211,7 +211,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4cb1c5a846f28e4caa1a0bb20eceecf, type: 2}
+  - {fileID: 2100000, guid: e0de22327ccdd9a4f95e2fb74f49b11b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -591,12 +591,13 @@ MonoBehaviour:
   Rotation: 90
   IsTargetFish: 1
   HasBeenHit: 0
-  Color: pink
+  Color: red
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level 1
 --- !u!95 &7976751554579448254
 Animator:
   serializedVersion: 4

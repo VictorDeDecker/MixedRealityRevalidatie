@@ -449,6 +449,7 @@ MonoBehaviour:
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level3
 --- !u!54 &6258850897548676506
 Rigidbody:
   m_ObjectHideFlags: 0

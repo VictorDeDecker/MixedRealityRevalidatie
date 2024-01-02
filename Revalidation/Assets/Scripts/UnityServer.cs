@@ -1,21 +1,18 @@
+using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UnityServer : MonoBehaviour
 {
-    private const string prefix = "http://localhost:8085/";
     private static UnityServer instance;
+    private const string SignalRHubUrl = "http://45.93.139.33:32836/gameHub";
+    private HubConnection hubConnection;
     public ObjectSpawnerV2 objectSpawner;
     public HandSelector handSelector;
     private List<TouchObject> touchObject;
-    private HttpListener listener;
-    private bool isRunning;
     public LevelManager levelManager;
     public int RedFish = 5;
     public int PinkFish = 5;
@@ -50,144 +47,62 @@ public class UnityServer : MonoBehaviour
 
     void Start()
     {
-        System.Threading.ThreadPool.QueueUserWorkItem(o => StartServer());
+        ConnectToSignalRHub();
     }
 
-    void OnApplicationQuit()
+    void OnDestroy()
     {
-        isRunning = false;
-        StopServer();
+        hubConnection?.StopAsync();
     }
 
-    void StartServer()
+    private async void ConnectToSignalRHub()
     {
-        try
+        hubConnection = new HubConnectionBuilder().WithUrl(SignalRHubUrl).Build();
+
+        hubConnection.On<ParameterChangeRequest>("ReceivedParameters", (request) =>
         {
-            listener = new HttpListener();
-            listener.Prefixes.Add(prefix);
-            listener.Start();
+            UpdateParameters(request);
+        });
 
-            Debug.Log("Server is listening for requests...");
-            isRunning = true;
-            while (isRunning)
-            {
-                if (isRunning)
-                {
-                    HttpListenerContext context = listener.GetContext();
-                    ProcessRequest(context);
-                }
-            }
-        }
-        catch (Exception e)
+        hubConnection.On<SceneChange>("ReceivedSceneChange", (request) =>
         {
-            Debug.LogError($"Error starting the server: {e.Message}");
-        }
-    }
+            ChangeScene(request);
+        });
 
-    void StopServer()
-    {
-        if (listener != null && listener.IsListening)
-        {
-            listener.Stop();
-            listener.Close();
-            Debug.Log("Server stopped");
-        }
-    }
-
-    void ProcessRequest(HttpListenerContext context)
-    {
-        try
-        {
-            HttpListenerRequest request = context.Request;
-
-            if (request.HttpMethod == "OPTIONS")
-            {
-                SendOkResponse(context);
-                return;
-            }
-
-            if (request.RawUrl == "/test")
-            {
-                SendOkResponse(context);
-                return;
-            }
-
-            if (request.RawUrl == "/updateParameter")
-            {
-                using (Stream body = request.InputStream)
-                {
-                    using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
-                    {
-                        string requestBody = reader.ReadToEnd();
-
-                        ParameterChangeRequest parameterChangeRequest = JsonConvert.DeserializeObject<ParameterChangeRequest>(requestBody);
-                        Debug.Log($"Deserialized: {parameterChangeRequest}");
-
-                        UpdateParameters(parameterChangeRequest);
-
-                        HttpListenerResponse response = context.Response;
-                        response.Headers.Add("Access-Control-Allow-Origin", "*");
-                        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-                        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-                        response.ContentType = "application/json";
-
-                        string jsonResponse = "{\"message\": \"Succesful\"}";
-                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-                        response.ContentLength64 = buffer.Length;
-                        Stream output = response.OutputStream;
-                        output.Write(buffer, 0, buffer.Length);
-                        output.Close();
-                    }
-                }
-            }
-
-            if (request.RawUrl == "/changeScene")
-            {
-                using (Stream body = request.InputStream)
-                {
-                    using (StreamReader reader = new StreamReader(body, request.ContentEncoding))
-                    {
-                        string requestBody = reader.ReadToEnd();
-
-                        SceneChange sceneChange = JsonConvert.DeserializeObject<SceneChange>(requestBody);
-                        //Debug.Log($"Deserialized: {sceneChange.destinationScene}");
-
-                        ChangeScene(sceneChange);
-
-                        HttpListenerResponse response = context.Response;
-                        response.Headers.Add("Access-Control-Allow-Origin", "*");
-                        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-                        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-                        response.ContentType = "application/json";
-
-                        string jsonResponse = "{\"message\": \"Scene was changed\"}";
-                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-                        response.ContentLength64 = buffer.Length;
-                        Stream output = response.OutputStream;
-                        output.Write(buffer, 0, buffer.Length);
-                        output.Close();
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error processing the request: {e.Message}");
-        }
+        await hubConnection.StartAsync();
     }
 
     void UpdateParameters(ParameterChangeRequest request)
     {
         try
         {
-            switch (request.scriptToChange)
+            switch (request.Script)
             {
                 case "touchObject":
-                    if (request.parameterToChange == "speed")
+                    if (request.Parameter == "speed")
                     {
                         foreach (TouchObject spawnObject in touchObject)
                         {
-                            spawnObject.Speed = request.parameterValue;
+                            spawnObject.Speed = request.Value;
+                        }
+                    }
+                    break;
+                case "handSelector":
+                    if (request.Parameter == "hand")
+                    {
+                        switch (request.Value)
+                        {
+                            case -1:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("left"));
+                                break;
+                            case 0:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("both"));
+                                break;
+                            case 1:
+                                MainThreadDispatcher.Instance().Enqueue(() => handSelector.SelectHand("right"));
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;
@@ -211,36 +126,36 @@ public class UnityServer : MonoBehaviour
                     }
                     break;
                 case "objectSpawner":
-                    switch (request.parameterToChange.ToLower())
+                    switch (request.Parameter.ToLower())
                     {
                         //Default parameters
                         case "levellengthinsec":
-                            objectSpawner.LevelLengthInSec = (int)request.parameterValue;
+                            objectSpawner.LevelLengthInSec = (int)request.Value;
                             break;
                         case "height":
-                            objectSpawner.Height = request.parameterValue;
+                            objectSpawner.Height = request.Value;
                             break;
                         case "radius":
-                            objectSpawner.SpawnRadius = request.parameterValue;
+                            objectSpawner.SpawnRadius = request.Value;
                             break;
                         case "shoulderwidth":
-                            objectSpawner.SpaceBetween = request.parameterValue;
+                            objectSpawner.SpaceBetween = request.Value;
                             break;
                         case "ducking":
-                            objectSpawner.IncludeDucking = request.parameterValue != 0;
+                            objectSpawner.IncludeDucking = request.Value != 0;
                             break;
                         case "movement":
-                            objectSpawner.IncludeMovement = request.parameterValue != 0;
+                            objectSpawner.IncludeMovement = request.Value != 0;
                             break;
                         case "obstacles":
-                            objectSpawner.IncludeObstacles = request.parameterValue != 0;
+                            objectSpawner.IncludeObstacles = request.Value != 0;
                             break;
                         case "waitbetweenspawns":
-                            objectSpawner.TimeBetweenSpawnsInSec = (int)request.parameterValue;
+                            objectSpawner.TimeBetweenSpawnsInSec = (int)request.Value;
                             break;
                         //Paremeters regarding fish
                         case "redfishamount":
-                            RedFish = (int)request.parameterValue;
+                            RedFish = (int)request.Value;
                             objectSpawner.ProgressBar.UpdateAmountOfFish();
                             if (!objectSpawner.ColorsToSpawn.Contains("Red"))
                             {
@@ -249,7 +164,7 @@ public class UnityServer : MonoBehaviour
                             GetSceneNameAndReload();
                             break;
                         case "pinkfishamount":
-                            PinkFish = (int)request.parameterValue;
+                            PinkFish = (int)request.Value;
                             objectSpawner.ProgressBar.UpdateAmountOfFish();
                             if (!objectSpawner.ColorsToSpawn.Contains("Pink"))
                             {
@@ -258,7 +173,7 @@ public class UnityServer : MonoBehaviour
                             GetSceneNameAndReload();
                             break;
                         case "greenfishamount":
-                            GreenFish = (int)request.parameterValue;
+                            GreenFish = (int)request.Value;
                             objectSpawner.ProgressBar.UpdateAmountOfFish();
                             if (!objectSpawner.ColorsToSpawn.Contains("Green"))
                             {
@@ -267,7 +182,7 @@ public class UnityServer : MonoBehaviour
                             GetSceneNameAndReload();
                             break;
                         case "yellowfishamount":
-                            YellowFish = (int)request.parameterValue;
+                            YellowFish = (int)request.Value;
                             objectSpawner.ProgressBar.UpdateAmountOfFish();
                             if (!objectSpawner.ColorsToSpawn.Contains("Yellow"))
                             {
@@ -328,7 +243,6 @@ public class UnityServer : MonoBehaviour
         {
             MainThreadDispatcher.Instance().Enqueue(() =>
             {
-                Debug.Log(levelManager.GetActiveScene());
                 UpdateScene(levelManager.GetActiveScene());
             });
         }
@@ -403,38 +317,24 @@ public class UnityServer : MonoBehaviour
                 break;
         }
     }
-
-    void SendOkResponse(HttpListenerContext context)
-    {
-        HttpListenerResponse response = context.Response;
-        response.Headers.Add("Access-Control-Allow-Origin", "*");
-        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-        response.ContentType = "application/json";
-
-        string jsonResponse = "{\"message\": \"OK\"}";
-        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-        response.ContentLength64 = buffer.Length;
-        Stream output = response.OutputStream;
-        output.Write(buffer, 0, buffer.Length);
-        output.Close();
-    }
 }
 
 [Serializable]
 public class ParameterChangeRequest
 {
-    [JsonProperty(PropertyName = "script")]
-    public string scriptToChange;
-    [JsonProperty(PropertyName = "parameter")]
-    public string parameterToChange;
-    [JsonProperty(PropertyName = "value")]
-    public float parameterValue;
+    [JsonProperty("script")]
+    public string Script { get; set; }
+
+    [JsonProperty("parameter")]
+    public string Parameter { get; set; }
+
+    [JsonProperty("value")]
+    public float Value { get; set; }
 }
 
 [Serializable]
 public class SceneChange
 {
-    [JsonProperty(PropertyName = "scene")]
-    public string destinationScene;
+    [JsonProperty(PropertyName = "destinationScene")]
+    public string destinationScene { get; set; }
 }

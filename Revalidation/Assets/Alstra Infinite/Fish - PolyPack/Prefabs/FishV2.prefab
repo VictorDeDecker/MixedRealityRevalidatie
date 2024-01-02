@@ -597,6 +597,7 @@ MonoBehaviour:
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level 1
 --- !u!95 &9191125292701657807
 Animator:
   serializedVersion: 4

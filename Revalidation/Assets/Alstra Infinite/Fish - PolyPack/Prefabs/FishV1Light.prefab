@@ -84,7 +84,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7d1a9639c0579884f9857a419b4e64ea, type: 2}
+  - {fileID: 2100000, guid: a4cb1c5a846f28e4caa1a0bb20eceecf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -225,14 +225,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9286f2bc44280429d7d1f266edc68b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 2
   Rotation: -90
+  IsTargetFish: 1
+  HasBeenHit: 0
+  Color: pink
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: 1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level3
 --- !u!95 &89403950118352420
 Animator:
   serializedVersion: 4
@@ -311,14 +315,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9286f2bc44280429d7d1f266edc68b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTag: Target
+  DestroyPlaneTag: Target
   Speed: 1
   Rotation: 0
+  IsTargetFish: 0
+  HasBeenHit: 0
+  Color: 
   RockDirection: {x: 0, y: 0, z: 1}
   ShipDirection: {x: 0, y: 0, z: 1}
   BalloonDirection: {x: 0, y: 0, z: -1}
   SeagullDirection: {x: 0, y: 0, z: -1}
   ProgressBar: {fileID: 0}
+  Scene: Level 2
 --- !u!1 &1785874036920087302
 GameObject:
   m_ObjectHideFlags: 0
