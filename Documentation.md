@@ -127,3 +127,10 @@ We wrote a few small scripts that had a single purpose.
 - #### **Xr Handler**
 
   This script is used to bind the close task menu script to the right controller. When a player presses a button, the menu appears/dissappears.
+
+## Known bugs
+- #### **Multiview not available in project**
+  Multiview is not supported when using the post processing v2 package. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
+
+- #### **Build project has random stutters**
+  When the project is build, it is pretty laggy/stuttery/jittery. This is because of a known issue which involves deltaTime. There is not a straightforward fix. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
