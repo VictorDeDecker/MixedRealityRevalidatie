@@ -9,6 +9,10 @@
   - [Scripts](#scripts)
     - [Fish generator (SetSpawner and TouchObject scripts)](#fish-generator-setspawner-and-touchobject-scripts)
     - [Unity server](#unity-server)
+    - [UpdateProgressBar](#updateprogressbar)
+    - [Fishnet collision](#fishnet-collision)
+    - [Small scripts](#small-scripts)
+  - [Known bugs](#known-bugs)
 
 ## Post processing
 
@@ -129,8 +133,10 @@ We wrote a few small scripts that had a single purpose.
   This script is used to bind the close task menu script to the right controller. When a player presses a button, the menu appears/dissappears.
 
 ## Known bugs
+
 - #### **Multiview not available in project**
-  Multiview is not supported when using the post processing v2 package. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
+
+  Multiview is not supported when using the post processing v2 package. So it cannot be used to increase performance when building the apk file. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
 
 - #### **Build project has random stutters**
-  When the project is build, it is pretty laggy/stuttery/jittery. This is because of a known issue which involves deltaTime. There is not a straightforward fix. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
+  When the project is build, it is pretty laggy/stuttery/jittery. This is a combination of the previous issue of multiview not being available and the map being pretty large and because of a known issue which involves deltaTime. There did not seem to be a straightforward fix. [unity issue tracker](https://issuetracker.unity3d.com/issues/quest-stutter-slash-frame-pacing-with-oculusruntime-dot-waittobeginframe-when-the-player-is-built)
