@@ -38,15 +38,20 @@ public class UnityServer : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    void Start()
+    {
+        if (objectSpawner == null)
+        {
+            objectSpawner = FindObjectOfType<ObjectSpawnerV2>();
+        }
 
         if (objectSpawner != null)
         {
             touchObject = objectSpawner.Objects;
         }
-    }
 
-    void Start()
-    {
         ConnectToSignalRHub();
     }
 
@@ -81,6 +86,9 @@ public class UnityServer : MonoBehaviour
                 case "touchObject":
                     if (request.Parameter == "speed")
                     {
+                        if (touchObject == null)
+                            touchObject = objectSpawner.Objects;
+
                         foreach (TouchObject spawnObject in touchObject)
                         {
                             spawnObject.Speed = request.Value;
@@ -112,6 +120,7 @@ public class UnityServer : MonoBehaviour
                         //Default parameters
                         case "levellengthinsec":
                             objectSpawner.LevelLengthInSec = (int)request.Value;
+                            objectSpawner.ProgressBar.TimeToComplete = request.Value;
                             break;
                         case "height":
                             objectSpawner.Height = request.Value;

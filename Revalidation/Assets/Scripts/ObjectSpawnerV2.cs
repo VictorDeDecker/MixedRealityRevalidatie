@@ -154,7 +154,7 @@ public class ObjectSpawnerV2 : MonoBehaviour
 
     private void CheckColorsToSpawn()
     {
-        if (ColorsToSpawn.Count < 0) return;
+        if (ColorsToSpawn.Count <= 0) return;
 
         if (ProgressBar.AllRedFishesCaught)
         {

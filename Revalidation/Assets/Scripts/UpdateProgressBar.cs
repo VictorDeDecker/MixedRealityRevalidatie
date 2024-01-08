@@ -105,7 +105,10 @@ public class UpdateProgressBar : MonoBehaviour
     private void Update()
     {
         if (!won && !lost)
+        {
             CurrentTime += Time.deltaTime;
+        }
+
         CheckIfLost();
     }
 
@@ -174,7 +177,8 @@ public class UpdateProgressBar : MonoBehaviour
         UpdateColorHit(color);
         UpdateHandHit(hand);
 
-        if (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + hitNotTargetFish) > amountOfObjectsToHit && !lost && CheckIfHasWon())
+        UpdateProgress();
+        if (!lost && CheckIfHasWon())
         {
             UnityServer.objectSpawner.IsSpawning = false;
             won = true;
@@ -188,7 +192,6 @@ public class UpdateProgressBar : MonoBehaviour
             SetStatsScreenText(false);
             WinScreen.gameObject.SetActive(true);
         }
-        UpdateProgress();
     }
 
     private void CheckIfLost()
@@ -244,7 +247,7 @@ public class UpdateProgressBar : MonoBehaviour
     {
         if (!won && !lost)
         {
-            var progress = (hitObjects - (missedObjects + hitObjectWithHead + hitObstacle + (hitNotTargetFish))) / amountOfObjectsToHit;
+            var progress = (RedFishesHit - RedFishesMissed + PinkFishesHit - PinkFishesMissed + GreenFishesHit - GreenFishesMissed + YellowFishesHit - YellowFishesMissed) / amountOfObjectsToHit;
             progressBar.fillAmount = progress;
         }
     }
